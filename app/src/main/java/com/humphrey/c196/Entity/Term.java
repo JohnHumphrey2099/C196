@@ -50,4 +50,11 @@ public class Term {
     public void setTermID(int termID) {
         this.termID = termID;
     }
+
+    @Override
+    public String toString() {
+        return "Term{" +
+                "title='" + title + '\'' +
+                '}';
+    }
 }
