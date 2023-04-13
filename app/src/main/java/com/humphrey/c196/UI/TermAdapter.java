@@ -45,7 +45,7 @@ public class TermAdapter extends RecyclerView.Adapter<TermAdapter.TermViewHolder
                     int position = getAdapterPosition();
                     final Term selectedTerm = termList.get(position);
                     Intent intent = new Intent(context, TermDetail.class);
-
+                    context.startActivity(intent);
                 }
             });
         }

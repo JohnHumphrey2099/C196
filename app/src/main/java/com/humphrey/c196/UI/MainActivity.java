@@ -20,21 +20,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Repository r = new Repository(getApplication());
-        r.insertTerm(new Term("guy", 3, 5));
-        r.insertTerm(new Term("girl", 8, 9));
-        r.insertTerm(new Term("guy", 3, 5));
-        r.insertTerm(new Term("girl", 8, 9));
-        r.insertTerm(new Term("guy", 3, 5));
-        r.insertTerm(new Term("girl", 8, 9));
-        r.insertTerm(new Term("guy", 3, 5));
-        r.insertTerm(new Term("girl", 8, 9));
-        r.insertTerm(new Term("guy", 3, 5));
-        r.insertTerm(new Term("girl", 8, 9));
-        r.insertTerm(new Term("guy", 3, 5));
-        r.insertTerm(new Term("girl", 8, 9));
-        r.insertTerm(new Term("guy", 3, 5));
-        r.insertTerm(new Term("girl", 8, 9));
+
     }
 
     public void goToTermScreen(View view){
