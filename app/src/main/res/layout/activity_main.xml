@@ -32,7 +32,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="right"
         android:layout_marginBottom="92dp"
-        android:onClick="goToTermScreen"
+        android:onClick="goToCourseScreen"
         android:text="Start"
         android:textColor="@color/black"
         android:textSize="20sp"
