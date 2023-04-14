@@ -6,4 +6,75 @@
     android:layout_height="match_parent"
     tools:context=".UI.TermDetail">
 
+    <TextView
+        android:id="@+id/labelTermStart"
+        android:layout_width="40dp"
+        android:layout_height="45dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="10dp"
+        android:gravity="center"
+        android:text="Start Date"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/editTextTermStart" />
+
+    <TextView
+        android:id="@+id/labelTermEnd"
+        android:layout_width="40dp"
+        android:layout_height="45dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="10dp"
+        android:gravity="center"
+        android:text="End Date"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/editTextTd" />
+
+    <EditText
+        android:id="@+id/editTextTermTitle"
+        android:layout_width="306dp"
+        android:layout_height="67dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginTop="20dp"
+        android:ems="10"
+        android:hint="Enter Term Title"
+        android:inputType="textPersonName"
+        android:textColorHint="#D1D1D1"
+        app:layout_constraintStart_toEndOf="@+id/labelTermTitle"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/editTextTermStart"
+        android:layout_width="306dp"
+        android:layout_height="66dp"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="16dp"
+        android:ems="10"
+        android:hint="Enter Term Start Date"
+        android:inputType="textPersonName"
+        android:textColorHint="@color/hintText"
+        app:layout_constraintStart_toEndOf="@+id/labelTermStart"
+        app:layout_constraintTop_toBottomOf="@+id/editTextTermTitle" />
+
+    <TextView
+        android:id="@+id/labelTermTitle"
+        android:layout_width="40dp"
+        android:layout_height="45dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="10dp"
+        android:gravity="center"
+        android:text="Title"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/editTextTermTitle" />
+
+    <EditText
+        android:id="@+id/editTextTd"
+        android:layout_width="306dp"
+        android:layout_height="66dp"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="16dp"
+        android:ems="10"
+        android:hint="Enter Term End Date"
+        android:inputType="textPersonName"
+        android:textColorHint="@color/hintText"
+        app:layout_constraintStart_toEndOf="@+id/labelTermEnd"
+        app:layout_constraintTop_toBottomOf="@+id/editTextTermStart" />
 </androidx.constraintlayout.widget.ConstraintLayout>

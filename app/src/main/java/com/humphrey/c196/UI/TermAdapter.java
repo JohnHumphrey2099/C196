@@ -45,11 +45,17 @@ public class TermAdapter extends RecyclerView.Adapter<TermAdapter.TermViewHolder
                     int position = getAdapterPosition();
                     final Term selectedTerm = termList.get(position);
                     Intent intent = new Intent(context, TermDetail.class);
+                    intent.putExtra("id", selectedTerm.getTermID());
+                    intent.putExtra("title", selectedTerm.getTitle());
+                    intent.putExtra("start", selectedTerm.getStartDate());
+                    intent.putExtra("end", selectedTerm.getEndDate());
+
                     context.startActivity(intent);
                 }
             });
         }
     }
+    //sets the layout to display (i.e. the row)
     @NonNull
     @Override
     public TermAdapter.TermViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -57,6 +63,7 @@ public class TermAdapter extends RecyclerView.Adapter<TermAdapter.TermViewHolder
         return new TermAdapter.TermViewHolder(view);
     }
 
+    //sets the values of the views inside the layout set in the onCreateViewHolder
     @Override
     public void onBindViewHolder(@NonNull TermAdapter.TermViewHolder holder, int position) {
         if(termList != null){
@@ -69,6 +76,17 @@ public class TermAdapter extends RecyclerView.Adapter<TermAdapter.TermViewHolder
 
     @Override
     public int getItemCount() {
-        return termList.size();
+
+        if (termList != null){
+            return termList.size();
+        }
+        else {
+            return 0;
+        }
+    }
+
+    public void setTerms(List<Term> terms){
+        termList = terms;
+        notifyDataSetChanged();
     }
 }
