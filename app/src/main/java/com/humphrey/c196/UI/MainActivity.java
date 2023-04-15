@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 
 import com.humphrey.c196.DAO.AssessmentDAO;
 import com.humphrey.c196.DAO.TermDAO;
@@ -23,24 +24,11 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Repository repository = new Repository(getApplication());
-
-        repository.insertCourse(new Course("aoij", 3, "oijo", 4, "John",
-                "494949","dkjkj"));
-        repository.insertCourse(new Course("dfdf", 3, "oijo", 4, "John",
-                "494949","dkjkj"));
-        repository.insertCourse(new Course("sjthedrg", 3, "oijo", 4, "John",
-                "494949","dkjkj"));
-        repository.insertCourse(new Course("ikhjgfhd4", 3, "oijo", 4, "John",
-                "494949","dkjkj"));
-        repository.insertCourse(new Course("aoij", 3, "oijo", 4, "John",
-                "494949","dkjkj"));
-        repository.insertCourse(new Course("dfdf", 3, "oijo", 4, "John",
-                "494949","dkjkj"));
-        repository.insertCourse(new Course("sjthedrg", 3, "oijo", 4, "John",
-                "494949","dkjkj"));
-        repository.insertCourse(new Course("ikhjgfhd4", 3, "oijo", 4, "John",
-                "494949","dkjkj"));
+        Repository r = new Repository(getApplication());
+        r.insertCourse(new Course("School", 345, "open", 3345, "Dave", "456-463-3456", "dave@dave.dave",1));
+        r.insertCourse(new Course("Class", 345, "open", 3345, "Dave", "456-463-3456", "dave@dave.dave",1));
+        r.insertCourse(new Course("X", 345, "open", 3345, "Dave", "456-463-3456", "dave@dave.dave",0));
+        r.insertCourse(new Course("X2", 345, "open", 3345, "Dave", "456-463-3456", "dave@dave.dave",0));
     }
 
     public void goToTermScreen(View view){

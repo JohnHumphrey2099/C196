@@ -17,6 +17,8 @@ public class Course {
     private String instructorPhone;
     private String instructorEmail;
 
+    private int termID;
+
     public int getCourseID() {
         return courseID;
     }
@@ -89,10 +91,16 @@ public class Course {
         this.instructorEmail = instructorEmail;
     }
 
+    public int getTermID() {
+        return termID;
+    }
 
+    public void setTermID(int termID) {
+        this.termID = termID;
+    }
 
     public Course(String title, int startDate, String status, int endDate,
-                  String instructorName, String instructorPhone, String instructorEmail) {
+                  String instructorName, String instructorPhone, String instructorEmail, int termID) {
         this.title = title;
         this.startDate = startDate;
         this.status = status;
@@ -100,5 +108,6 @@ public class Course {
         this.instructorName = instructorName;
         this.instructorPhone = instructorPhone;
         this.instructorEmail = instructorEmail;
+        this.termID = termID;
     }
 }

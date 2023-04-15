@@ -19,7 +19,7 @@ import com.humphrey.c196.Entity.Assessment;
 import com.humphrey.c196.Entity.Course;
 import com.humphrey.c196.Entity.Term;
 
-@Database(entities={Term.class, Assessment.class, Course.class}, version=4, exportSchema = false)
+@Database(entities={Term.class, Assessment.class, Course.class}, version=5, exportSchema = false)
 
 
 public abstract class DatabaseBuilder extends RoomDatabase {

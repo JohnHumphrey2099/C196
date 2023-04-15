@@ -13,7 +13,8 @@ public class Term {
     private int startDate;
     private int endDate;
 
-    public Term(String title, int startDate, int endDate) {
+    public Term(int termID, String title, int startDate, int endDate) {
+        this.termID = termID;
         this.title = title;
         this.startDate = startDate;
         this.endDate = endDate;

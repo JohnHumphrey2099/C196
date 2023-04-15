@@ -4,7 +4,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 
 import com.humphrey.c196.Database.Repository;
 import com.humphrey.c196.Entity.Term;
@@ -24,10 +26,13 @@ public class TermScreen extends AppCompatActivity {
         recyclerView.setAdapter(termAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         repository = new Repository(getApplication());
-
         List<Term> allTerms = repository.getALlTerms();
         termAdapter.setTermList(allTerms);
     }
 
+    public void goToTermDetailScreen(View view) {
+        Intent intent = new Intent(TermScreen.this, TermDetail.class);
+        startActivity(intent);
 
+    }
 }

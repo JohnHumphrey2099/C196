@@ -38,6 +38,12 @@ public class Repository {
         assessmentDAO = db.assessmentDAO();
         courseDAO = db.courseDAO();
     }
+
+    public void updateTerm(Term term){
+        databaseExecutor.execute(()->{
+            termDAO.update(term);
+        });
+    }
     public void insertTerm(Term term){
         databaseExecutor.execute(()->{
            termDAO.insert(term);
@@ -57,6 +63,11 @@ public class Repository {
         Util.waitAsec();
         return allTerms;
     }
+    public void updateAssessment(Assessment assessment){
+        databaseExecutor.execute(()-> {
+            assessmentDAO.update(assessment);
+        });
+    }
     public void insertAssessment(Assessment assessment){
         databaseExecutor.execute(()->{
             assessmentDAO.insert(assessment);
@@ -75,6 +86,12 @@ public class Repository {
         });
         Util.waitAsec();
         return allAssessments;
+    }
+
+    public void updateCourse(Course course){
+        databaseExecutor.execute(()->{
+            courseDAO.update(course);
+        });
     }
     public void insertCourse(Course course){
         databaseExecutor.execute(()->{

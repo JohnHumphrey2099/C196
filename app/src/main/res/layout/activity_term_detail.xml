@@ -11,29 +11,29 @@
         android:layout_width="40dp"
         android:layout_height="45dp"
         android:layout_marginStart="20dp"
-        android:layout_marginTop="10dp"
         android:gravity="center"
         android:text="Start Date"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/editTextTermStart" />
+        android:textColor="@color/black"
+        app:layout_constraintBottom_toBottomOf="@+id/editTextTermStart"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
         android:id="@+id/labelTermEnd"
         android:layout_width="40dp"
         android:layout_height="45dp"
         android:layout_marginStart="20dp"
-        android:layout_marginTop="10dp"
         android:gravity="center"
         android:text="End Date"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/editTextTd" />
+        android:textColor="@color/black"
+        app:layout_constraintBottom_toBottomOf="@+id/editTextTermEnd"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <EditText
         android:id="@+id/editTextTermTitle"
-        android:layout_width="306dp"
-        android:layout_height="67dp"
-        android:layout_marginLeft="5dp"
-        android:layout_marginTop="20dp"
+        android:layout_width="235dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="4dp"
+        android:layout_marginTop="60dp"
         android:ems="10"
         android:hint="Enter Term Title"
         android:inputType="textPersonName"
@@ -43,10 +43,10 @@
 
     <EditText
         android:id="@+id/editTextTermStart"
-        android:layout_width="306dp"
-        android:layout_height="66dp"
+        android:layout_width="235dp"
+        android:layout_height="50dp"
         android:layout_marginStart="5dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="10dp"
         android:ems="10"
         android:hint="Enter Term Start Date"
         android:inputType="textPersonName"
@@ -59,22 +59,88 @@
         android:layout_width="40dp"
         android:layout_height="45dp"
         android:layout_marginStart="20dp"
-        android:layout_marginTop="10dp"
         android:gravity="center"
         android:text="Title"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/editTextTermTitle" />
+        android:textColor="@color/black"
+        app:layout_constraintBottom_toBottomOf="@+id/editTextTermTitle"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/labelCurrentCourses"
+        android:layout_width="211dp"
+        android:layout_height="36dp"
+        android:layout_marginStart="24dp"
+        android:gravity="center"
+        android:text="Current Courses"
+        android:textColor="@color/black"
+        app:layout_constraintBottom_toTopOf="@+id/coursesInsideTermDetails"
+        app:layout_constraintEnd_toEndOf="@+id/coursesInsideTermDetails"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <EditText
-        android:id="@+id/editTextTd"
-        android:layout_width="306dp"
-        android:layout_height="66dp"
+        android:id="@+id/editTextTermEnd"
+        android:layout_width="235dp"
+        android:layout_height="50dp"
         android:layout_marginStart="5dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="10dp"
         android:ems="10"
         android:hint="Enter Term End Date"
         android:inputType="textPersonName"
         android:textColorHint="@color/hintText"
         app:layout_constraintStart_toEndOf="@+id/labelTermEnd"
         app:layout_constraintTop_toBottomOf="@+id/editTextTermStart" />
+
+    <TextView
+        android:id="@+id/textViewTermHeader"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Term Details"
+        android:textColor="@color/black"
+        android:textSize="24sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/termDetailSaveButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="84dp"
+        android:layout_marginTop="12dp"
+        android:text="SAVE"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editTextTermEnd" />
+
+    <Button
+        android:id="@+id/termDetailAddCourseToTermButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="20dp"
+        android:text="ADD COURSE"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/labelCurrentCourses" />
+
+    <Button
+        android:id="@+id/termDetailCancelButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:layout_marginEnd="96dp"
+        android:onClick="goToTermScreen"
+        android:text="CANCEL"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editTextTermEnd" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/coursesInsideTermDetails"
+        android:layout_width="219dp"
+        android:layout_height="386dp"
+        android:layout_marginStart="20dp"
+        android:background="@drawable/my_border_drawable"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/termDetailSaveButton"
+        app:layout_constraintVertical_bias="0.727" />
 </androidx.constraintlayout.widget.ConstraintLayout>
