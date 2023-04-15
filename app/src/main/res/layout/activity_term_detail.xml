@@ -71,7 +71,7 @@
         android:layout_height="36dp"
         android:layout_marginStart="24dp"
         android:gravity="center"
-        android:text="Current Courses"
+        android:text="Assigned Courses"
         android:textColor="@color/black"
         app:layout_constraintBottom_toTopOf="@+id/coursesInsideTermDetails"
         app:layout_constraintEnd_toEndOf="@+id/coursesInsideTermDetails"
@@ -107,10 +107,9 @@
         android:id="@+id/termDetailSaveButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="84dp"
         android:layout_marginTop="12dp"
-        android:text="SAVE"
-        app:layout_constraintStart_toStartOf="parent"
+        android:text="SAVE TERM"
+        app:layout_constraintStart_toStartOf="@+id/labelTermEnd"
         app:layout_constraintTop_toBottomOf="@+id/editTextTermEnd" />
 
     <Button
@@ -129,18 +128,18 @@
         android:layout_marginTop="12dp"
         android:layout_marginEnd="96dp"
         android:onClick="goToTermScreen"
-        android:text="CANCEL"
+        android:text="REMOVE TERM"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/textViewTermHeader"
         app:layout_constraintTop_toBottomOf="@+id/editTextTermEnd" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/coursesInsideTermDetails"
         android:layout_width="219dp"
         android:layout_height="386dp"
-        android:layout_marginStart="20dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="36dp"
         android:background="@drawable/my_border_drawable"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/termDetailSaveButton"
-        app:layout_constraintVertical_bias="0.727" />
+        app:layout_constraintTop_toBottomOf="@+id/termDetailSaveButton" />
 </androidx.constraintlayout.widget.ConstraintLayout>

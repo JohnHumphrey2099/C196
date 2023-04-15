@@ -17,6 +17,9 @@ import com.humphrey.c196.Entity.Course;
 import com.humphrey.c196.R;
 import com.humphrey.c196.Entity.Term;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class MainActivity extends AppCompatActivity {
 
 
@@ -25,10 +28,11 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Repository r = new Repository(getApplication());
-        r.insertCourse(new Course("School", 345, "open", 3345, "Dave", "456-463-3456", "dave@dave.dave",1));
-        r.insertCourse(new Course("Class", 345, "open", 3345, "Dave", "456-463-3456", "dave@dave.dave",1));
-        r.insertCourse(new Course("X", 345, "open", 3345, "Dave", "456-463-3456", "dave@dave.dave",0));
-        r.insertCourse(new Course("X2", 345, "open", 3345, "Dave", "456-463-3456", "dave@dave.dave",0));
+        List<Term> deleteTerms;
+        deleteTerms = r.getALlTerms();
+        for (Term t : deleteTerms){
+            r.deleteTerm(t);
+        }
     }
 
     public void goToTermScreen(View view){

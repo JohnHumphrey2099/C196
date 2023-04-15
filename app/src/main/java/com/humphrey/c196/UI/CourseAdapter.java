@@ -57,12 +57,7 @@ public class CourseAdapter extends RecyclerView.Adapter<CourseAdapter.CourseView
 
     @Override
     public void onBindViewHolder(@NonNull CourseViewHolder holder, int position) {
-        if(courseList != null){
             holder.courseViewTitle.setText(courseList.get(position).getTitle());
-        }
-        else{
-            holder.courseViewTitle.setText("No Courses Added");
-        }
     }
 
     @Override

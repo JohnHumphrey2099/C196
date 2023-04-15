@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.humphrey.c196.Database.Repository;
@@ -54,9 +55,15 @@ public class TermDetail extends AppCompatActivity {
         if (endDate != 0){
             editEndDate.setText(Integer.toString(endDate));
         }
-
-        for (Course c : repository.getAllCourses()){
+        for (Course c : repository.getAllCourses()) {
             if (c.getTermID() == id) associatedCourses.add(c);
+        }
+        TextView label = findViewById(R.id.labelCurrentCourses);
+        if (id == 0){
+            label.setText("Available Courses");
+        }
+        else{
+            label.setText("Assigned Courses");
         }
 
         RecyclerView recyclerView = findViewById(R.id.coursesInsideTermDetails);
@@ -65,7 +72,6 @@ public class TermDetail extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         courseAdapter.setCourseList(associatedCourses);
-
 
 
         Button saveButton = findViewById(R.id.termDetailSaveButton);

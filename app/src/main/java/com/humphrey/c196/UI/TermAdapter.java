@@ -18,9 +18,7 @@ import com.humphrey.c196.R;
 import java.util.List;
 
 public class TermAdapter extends RecyclerView.Adapter<TermAdapter.TermViewHolder>{
-    public void setTermList(List<Term> termList) {
-        this.termList = termList;
-    }
+
 
     private List<Term> termList;
     private final Context context;
@@ -66,12 +64,7 @@ public class TermAdapter extends RecyclerView.Adapter<TermAdapter.TermViewHolder
     //sets the values of the views inside the layout set in the onCreateViewHolder
     @Override
     public void onBindViewHolder(@NonNull TermAdapter.TermViewHolder holder, int position) {
-        if(termList != null){
         holder.textViewTitle.setText(termList.get(position).getTitle());
-        }
-        else{
-            holder.textViewTitle.setText("No Terms Added");
-        }
     }
 
     @Override
@@ -85,8 +78,8 @@ public class TermAdapter extends RecyclerView.Adapter<TermAdapter.TermViewHolder
         }
     }
 
-    public void setTerms(List<Term> terms){
-        termList = terms;
+    public void setTermList(List<Term> termList) {
+        this.termList = termList;
         notifyDataSetChanged();
     }
 }
