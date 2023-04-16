@@ -6,4 +6,130 @@
     android:layout_height="match_parent"
     tools:context=".UI.CourseDetail">
 
+
+    <TextView
+        android:id="@+id/labelCourseStart"
+        android:layout_width="40dp"
+        android:layout_height="45dp"
+        android:layout_marginStart="20dp"
+        android:gravity="center"
+        android:text="Start Date"
+        android:textColor="@color/black"
+        app:layout_constraintBottom_toBottomOf="@+id/editTextCourseStart"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/labelCourseEnd"
+        android:layout_width="40dp"
+        android:layout_height="45dp"
+        android:layout_marginStart="20dp"
+        android:gravity="center"
+        android:text="End Date"
+        android:textColor="@color/black"
+        app:layout_constraintBottom_toBottomOf="@+id/editTextCourseEnd"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <EditText
+        android:id="@+id/editTextCourseTitle"
+        android:layout_width="235dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="4dp"
+        android:layout_marginTop="16dp"
+        android:ems="10"
+        android:hint="Enter Course Title"
+        android:inputType="textPersonName"
+        android:textColorHint="#D1D1D1"
+        app:layout_constraintStart_toEndOf="@+id/labelCourseTitle"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/editTextCourseStart"
+        android:layout_width="235dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="10dp"
+        android:ems="10"
+        android:hint="Enter Course Start Date"
+        android:inputType="textPersonName"
+        android:textColorHint="@color/hintText"
+        app:layout_constraintStart_toEndOf="@+id/labelCourseStart"
+        app:layout_constraintTop_toBottomOf="@+id/editTextCourseTitle" />
+
+    <TextView
+        android:id="@+id/labelCourseTitle"
+        android:layout_width="40dp"
+        android:layout_height="45dp"
+        android:layout_marginStart="20dp"
+        android:gravity="center"
+        android:text="Title"
+        android:textColor="@color/black"
+        app:layout_constraintBottom_toBottomOf="@+id/editTextCourseTitle"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/labelAssessmentsCourseDetail"
+        android:layout_width="211dp"
+        android:layout_height="36dp"
+        android:layout_marginStart="24dp"
+        android:gravity="center"
+        android:text="Assessments"
+        android:textColor="@color/black"
+        app:layout_constraintBottom_toTopOf="@+id/coursesInsideCourseDetails"
+        app:layout_constraintEnd_toEndOf="@+id/coursesInsideCourseDetails"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <EditText
+        android:id="@+id/editTextCourseEnd"
+        android:layout_width="235dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="10dp"
+        android:ems="10"
+        android:hint="Enter Course End Date"
+        android:inputType="textPersonName"
+        android:textColorHint="@color/hintText"
+        app:layout_constraintStart_toEndOf="@+id/labelCourseEnd"
+        app:layout_constraintTop_toBottomOf="@+id/editTextCourseStart" />
+
+    <Button
+        android:id="@+id/courseDetailSaveButton"
+        android:layout_width="111dp"
+        android:layout_height="57dp"
+        android:layout_marginTop="12dp"
+        android:text="SAVE"
+        app:layout_constraintStart_toStartOf="@+id/labelCourseEnd"
+        app:layout_constraintTop_toBottomOf="@+id/editTextCourseEnd" />
+
+    <Button
+        android:id="@+id/courseDetailAddCourseToCourseButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="24dp"
+        android:text="ADD COURSE"
+        android:textSize="14sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/courseRemoveButton" />
+
+    <Button
+        android:id="@+id/courseRemoveButton"
+        android:layout_width="111dp"
+        android:layout_height="57dp"
+        android:layout_marginEnd="96dp"
+        android:onClick="goToCourseScreen"
+        android:text="REMOVE FROM TERM"
+        android:textSize="10sp"
+        app:layout_constraintBottom_toBottomOf="@+id/courseDetailSaveButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/courseDetailSaveButton"
+        app:layout_constraintVertical_bias="0.857" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/coursesInsideCourseDetails"
+        android:layout_width="192dp"
+        android:layout_height="167dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="36dp"
+        android:background="@drawable/my_border_drawable"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/courseDetailSaveButton" />
 </androidx.constraintlayout.widget.ConstraintLayout>

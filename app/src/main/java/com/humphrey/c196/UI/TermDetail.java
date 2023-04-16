@@ -47,8 +47,8 @@ public class TermDetail extends AppCompatActivity {
         id = getIntent().getIntExtra("id",0);
 
         editTitle.setText(title);
-
         repository = new Repository(getApplication());
+
         if (startDate != 0){
             editStartDate.setText(Integer.toString(startDate));
         }
@@ -59,20 +59,14 @@ public class TermDetail extends AppCompatActivity {
             if (c.getTermID() == id) associatedCourses.add(c);
         }
         TextView label = findViewById(R.id.labelCurrentCourses);
-        if (id == 0){
-            label.setText("Available Courses");
-        }
-        else{
-            label.setText("Assigned Courses");
-        }
 
         RecyclerView recyclerView = findViewById(R.id.coursesInsideTermDetails);
         final CourseAdapter courseAdapter = new CourseAdapter(this);
+
         recyclerView.setAdapter(courseAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         courseAdapter.setCourseList(associatedCourses);
-
 
         Button saveButton = findViewById(R.id.termDetailSaveButton);
         saveButton.setOnClickListener(new View.OnClickListener() {
@@ -101,10 +95,38 @@ public class TermDetail extends AppCompatActivity {
                 }
             }
         });
+        Button removeButton = findViewById(R.id.termRemoveButton);
+        removeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(associatedCourses.size() != 0) {
+                    deleteSelectedTerm(v);
+                }
+                else{
+                    Toast toast = Toast.makeText(getApplicationContext(), "Can't Remove Term until Associated Courses are Removed", Toast.LENGTH_LONG);
+                    toast.show();
+                }
+            }
+        });
+
+        if (id == 0){
+            label.setText("Available Courses");
+
+            removeButton.setEnabled(false);
+        }
+        else{
+            label.setText("Assigned Courses");
+            removeButton.setEnabled(true);
+        }
     }
     public void goToTermScreen(View view){
         Intent intent = new Intent(TermDetail.this, TermScreen.class);
         startActivity(intent);
 
+    }
+    public void deleteSelectedTerm(View view){
+        id = getIntent().getIntExtra("id",0);
+        repository.deleteTerm(new Term(id, null, 0, 0));
+        goToTermScreen(view);
     }
 }
