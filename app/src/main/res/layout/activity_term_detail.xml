@@ -33,7 +33,7 @@
         android:layout_width="235dp"
         android:layout_height="50dp"
         android:layout_marginStart="4dp"
-        android:layout_marginTop="60dp"
+        android:layout_marginTop="16dp"
         android:ems="10"
         android:hint="Enter Term Title"
         android:inputType="textPersonName"
@@ -47,10 +47,11 @@
         android:layout_height="50dp"
         android:layout_marginStart="5dp"
         android:layout_marginTop="10dp"
+        android:duplicateParentState="false"
         android:ems="10"
-        android:hint="Enter Term Start Date"
-        android:inputType="textPersonName"
-        android:textColorHint="@color/hintText"
+        android:hint="Enter date"
+        android:focusable="false"
+        android:inputType="none"
         app:layout_constraintStart_toEndOf="@+id/labelTermStart"
         app:layout_constraintTop_toBottomOf="@+id/editTextTermTitle" />
 
@@ -85,23 +86,11 @@
         android:layout_marginTop="10dp"
         android:ems="10"
         android:hint="Enter Term End Date"
-        android:inputType="textPersonName"
+        android:focusable="false"
+        android:inputType="none"
         android:textColorHint="@color/hintText"
         app:layout_constraintStart_toEndOf="@+id/labelTermEnd"
         app:layout_constraintTop_toBottomOf="@+id/editTextTermStart" />
-
-    <TextView
-        android:id="@+id/textViewTermHeader"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="Term Details"
-        android:textColor="@color/black"
-        android:textSize="24sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
 
     <Button
         android:id="@+id/termDetailSaveButton"
@@ -130,13 +119,12 @@
         android:onClick="goToTermScreen"
         android:text="REMOVE TERM"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/textViewTermHeader"
         app:layout_constraintTop_toBottomOf="@+id/editTextTermEnd" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/coursesInsideTermDetails"
-        android:layout_width="219dp"
-        android:layout_height="386dp"
+        android:layout_width="213dp"
+        android:layout_height="315dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="36dp"
         android:background="@drawable/my_border_drawable"

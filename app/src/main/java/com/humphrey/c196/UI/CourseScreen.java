@@ -5,6 +5,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
+import android.widget.EditText;
 
 import com.humphrey.c196.Database.Repository;
 import com.humphrey.c196.Entity.Course;

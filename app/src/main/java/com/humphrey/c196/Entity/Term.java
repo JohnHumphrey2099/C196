@@ -10,10 +10,10 @@ public class Term {
     private int termID;
 
     private String title;
-    private int startDate;
-    private int endDate;
+    private String startDate;
+    private String endDate;
 
-    public Term(int termID, String title, int startDate, int endDate) {
+    public Term(int termID, String title, String startDate, String endDate) {
         this.termID = termID;
         this.title = title;
         this.startDate = startDate;
@@ -28,11 +28,11 @@ public class Term {
         return title;
     }
 
-    public int getStartDate() {
+    public String getStartDate() {
         return startDate;
     }
 
-    public int getEndDate() {
+    public String getEndDate() {
         return endDate;
     }
 
@@ -40,11 +40,11 @@ public class Term {
         this.title = title;
     }
 
-    public void setStartDate(int startDate) {
+    public void setStartDate(String startDate) {
         this.startDate = startDate;
     }
 
-    public void setEndDate(int endDate) {
+    public void setEndDate(String endDate) {
         this.endDate = endDate;
     }
 
