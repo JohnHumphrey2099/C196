@@ -21,7 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
-
+    public static long numAlert;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
