@@ -16,18 +16,21 @@ import com.humphrey.c196.R;
 import java.util.List;
 
 public class CourseAdapter extends RecyclerView.Adapter<CourseAdapter.CourseViewHolder>{
+
     public void setCourseList(List<Course> courseList) {
         this.courseList = courseList;
+        notifyDataSetChanged();
     }
 
     private List<Course> courseList;
+    private int termID;
     private final Context context;
-
     private final LayoutInflater inflater;
 
     //constructor
-    public CourseAdapter(Context context) {
+    public CourseAdapter(Context context, int termID) {
         this.context = context;
+        this.termID = termID;
         this.inflater = LayoutInflater.from(context);
     }
 
@@ -43,6 +46,21 @@ public class CourseAdapter extends RecyclerView.Adapter<CourseAdapter.CourseView
                     int position = getAdapterPosition();
                     final Course selectedCourse = courseList.get(position);
                     Intent intent = new Intent(context, CourseDetail.class);
+                    intent.putExtra("id", selectedCourse.getCourseID());
+                    intent.putExtra("title", selectedCourse.getTitle());
+                    intent.putExtra("start", selectedCourse.getStartDate());
+                    intent.putExtra("end", selectedCourse.getEndDate());
+                    intent.putExtra("status", selectedCourse.getStatus());
+                    intent.putExtra("name", selectedCourse.getInstructorName());
+                    intent.putExtra("phone", selectedCourse.getInstructorPhone());
+                    intent.putExtra("email", selectedCourse.getInstructorEmail());
+                    intent.putExtra("note", selectedCourse.getNote());
+                    if (termID != 0) {
+                        intent.putExtra("termID", selectedCourse.getTermID());
+                    }
+                    else{
+                        intent.putExtra("termID", termID);
+                    }
                     context.startActivity(intent);
                 }
             });
@@ -69,11 +87,6 @@ public class CourseAdapter extends RecyclerView.Adapter<CourseAdapter.CourseView
         else{
             return 0;
         }
-    }
-
-    public void setCourses(List<Course> courses){
-        courseList = courses;
-        notifyDataSetChanged();
     }
 }
 

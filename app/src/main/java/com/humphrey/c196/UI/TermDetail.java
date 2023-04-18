@@ -7,9 +7,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.InputType;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -35,21 +33,18 @@ public class TermDetail extends AppCompatActivity {
     EditText editTitle;
     EditText editStartDate;
     EditText editEndDate;
-
     DatePickerDialog.OnDateSetListener startDate;
     DatePickerDialog.OnDateSetListener endDate;
     final Calendar calendarStart = Calendar.getInstance();
     final Calendar calendarEnd = Calendar.getInstance();
-
     int id;
-    String title;
-    Term term;
     Repository repository;
     List<Course> associatedCourses = new ArrayList<>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_term_detail);
+        id = getIntent().getIntExtra("id",0);
         repository = new Repository(getApplication());
         Button saveButton = findViewById(R.id.termDetailSaveButton);
         Button removeButton = findViewById(R.id.termRemoveButton);
@@ -60,9 +55,11 @@ public class TermDetail extends AppCompatActivity {
         editEndDate = findViewById(R.id.editTextTermEnd);
         TextView label = findViewById(R.id.labelCurrentCourses);
         RecyclerView recyclerView = findViewById(R.id.coursesInsideTermDetails);
-        final CourseAdapter courseAdapter = new CourseAdapter(this);
+
+        final CourseAdapter courseAdapter = new CourseAdapter(this, id);
         recyclerView.setAdapter(courseAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
         if (id == 0){
             label.setText("Available Courses");
 
@@ -74,7 +71,6 @@ public class TermDetail extends AppCompatActivity {
         }
 
         //set the EditText Views
-        id = getIntent().getIntExtra("id",0);
         if (id == 0){
             editStartDate.setText(sdf.format(new Date()));
             editEndDate.setText(sdf.format(new Date()));
@@ -160,23 +156,14 @@ public class TermDetail extends AppCompatActivity {
     }
     public boolean onOptionsItemSelected(MenuItem item){
         switch (item.getItemId()){
-            case android.R.id.home:
-                this.finish();
-                return true;
-            case R.id.notifyStart:
-                String dateFromScreen = editStartDate.getText().toString();
-                String myFormat = "MM/dd/yy";
-                SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
-                Date myDate = null;
-                try {
-                    myDate = sdf.parse(dateFromScreen);
-                }
-                catch (ParseException e){
-                    e.printStackTrace();
+            case R.id.removeTerm:
+                id = getIntent().getIntExtra("id",0);
+                repository.deleteTerm(new Term(id, null, null, null));
+                Intent intent = new Intent(TermDetail.this, TermScreen.class);
+                startActivity(intent);
             }
-
+            return super.onOptionsItemSelected(item);
         }
-    }
     private void updateDateLabel(EditText editText, Calendar calendar){
         String myFormat = "MM/dd/yy";
         SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);

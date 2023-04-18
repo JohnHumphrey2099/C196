@@ -99,8 +99,9 @@ public class Course {
         this.termID = termID;
     }
 
-    public Course(String title, String startDate, String status, String endDate,
-                  String instructorName, String instructorPhone, String instructorEmail, int termID) {
+    public Course(int courseID,String title, String startDate, String status, String endDate,
+                  String instructorName, String instructorPhone, String instructorEmail, String note, int termID) {
+        this.courseID = courseID;
         this.title = title;
         this.startDate = startDate;
         this.status = status;
@@ -108,6 +109,7 @@ public class Course {
         this.instructorName = instructorName;
         this.instructorPhone = instructorPhone;
         this.instructorEmail = instructorEmail;
+        this.note = note;
         this.termID = termID;
     }
 }

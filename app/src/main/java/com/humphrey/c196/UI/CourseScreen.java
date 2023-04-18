@@ -15,7 +15,6 @@ import java.util.List;
 
 public class CourseScreen extends AppCompatActivity {
 
-
     private Repository repository;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,5 +29,8 @@ public class CourseScreen extends AppCompatActivity {
 
         List<Course> allCourses = repository.getAllCourses();
         courseAdapter.setCourseList(allCourses);
+
+
+
     }
 }
