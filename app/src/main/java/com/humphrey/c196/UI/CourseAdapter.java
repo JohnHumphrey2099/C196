@@ -16,7 +16,6 @@ import com.humphrey.c196.R;
 import java.util.List;
 
 public class CourseAdapter extends RecyclerView.Adapter<CourseAdapter.CourseViewHolder>{
-
     public void setCourseList(List<Course> courseList) {
         this.courseList = courseList;
         notifyDataSetChanged();

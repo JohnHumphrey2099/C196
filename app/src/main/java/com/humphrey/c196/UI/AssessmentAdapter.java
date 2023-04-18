@@ -17,16 +17,19 @@ import java.util.List;
 public class AssessmentAdapter extends RecyclerView.Adapter<AssessmentAdapter.AssessmentViewHolder>{
         public void setAssessmentList(List<Assessment> assessmentList) {
             this.assessmentList = assessmentList;
+            notifyDataSetChanged();
         }
 
         private List<Assessment> assessmentList;
         private final Context context;
 
         private final LayoutInflater inflater;
+        private int courseID;
 
         //constructor
-        public AssessmentAdapter(Context context) {
+        public AssessmentAdapter(Context context, int courseID) {
             this.context = context;
+            this.courseID = courseID;
             this.inflater = LayoutInflater.from(context);
         }
 
@@ -42,6 +45,12 @@ public class AssessmentAdapter extends RecyclerView.Adapter<AssessmentAdapter.As
                         int position = getAdapterPosition();
                         final Assessment selectedAssessment = assessmentList.get(position);
                         Intent intent = new Intent(context, AssessmentDetail.class);
+                        intent.putExtra("courseID", courseID);
+                        intent.putExtra("id", selectedAssessment.getAssessmentID());
+                        intent.putExtra("title", selectedAssessment.getTitle());
+                        intent.putExtra("type", selectedAssessment.getType());
+                        intent.putExtra("start", selectedAssessment.getStartDate());
+                        intent.putExtra("end", selectedAssessment.getEndDate());
                         context.startActivity(intent);
                     }
                 });
@@ -56,12 +65,7 @@ public class AssessmentAdapter extends RecyclerView.Adapter<AssessmentAdapter.As
 
         @Override
         public void onBindViewHolder(@NonNull AssessmentViewHolder holder, int position) {
-            if(assessmentList != null){
-                holder.assessmentViewTitle.setText(assessmentList.get(position).getTitle());
-            }
-            else{
-                holder.assessmentViewTitle.setText("No Assessments Added");
-            }
+            holder.assessmentViewTitle.setText(assessmentList.get(position).getTitle());
         }
 
         @Override
@@ -72,11 +76,6 @@ public class AssessmentAdapter extends RecyclerView.Adapter<AssessmentAdapter.As
             else{
                 return 0;
             }
-        }
-
-        public void setAssessments(List<Assessment> assessments){
-            assessmentList = assessments;
-            notifyDataSetChanged();
         }
 }
 

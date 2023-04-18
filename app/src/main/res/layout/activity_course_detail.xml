@@ -30,12 +30,12 @@
                     android:id="@+id/courseDetailSaveButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
+                    android:layout_marginTop="30dp"
                     android:text="SAVE"
                     android:textSize="12sp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/coursesInsideCourseDetails" />
+                    app:layout_constraintTop_toBottomOf="@+id/assessmentsRecycler" />
 
                 <TextView
                     android:id="@+id/labelCourseStart"
@@ -49,7 +49,7 @@
                     app:layout_constraintTop_toBottomOf="@+id/labelCourseTitle" />
 
                 <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/assessmentsInsideCourseDetails"
+                    android:id="@+id/assessmentsRecycler"
                     android:layout_width="222dp"
                     android:layout_height="233dp"
                     android:background="@drawable/my_border_drawable"
@@ -241,8 +241,8 @@
                     android:gravity="center"
                     android:text="Assessments"
                     android:textColor="@color/black"
-                    app:layout_constraintEnd_toEndOf="@+id/coursesInsideCourseDetails"
-                    app:layout_constraintStart_toStartOf="@+id/coursesInsideCourseDetails"
+                    app:layout_constraintEnd_toEndOf="@+id/assessmentsRecycler"
+                    app:layout_constraintStart_toStartOf="@+id/assessmentsRecycler"
                     app:layout_constraintTop_toBottomOf="@+id/editNote" />
             </androidx.constraintlayout.widget.ConstraintLayout>
         </LinearLayout>

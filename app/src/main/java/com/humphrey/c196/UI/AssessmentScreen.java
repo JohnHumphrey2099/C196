@@ -19,7 +19,7 @@ public class AssessmentScreen extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_assessments_screen);
         RecyclerView recyclerView = findViewById(R.id.assessmentRecyclerView);
-        final AssessmentAdapter assessmentAdapter = new AssessmentAdapter(this);
+        final AssessmentAdapter assessmentAdapter = new AssessmentAdapter(this,0);
         recyclerView.setAdapter(assessmentAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         repository = new Repository(getApplication());

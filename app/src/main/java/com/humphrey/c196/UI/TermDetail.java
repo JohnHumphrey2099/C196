@@ -48,6 +48,7 @@ public class TermDetail extends AppCompatActivity {
         repository = new Repository(getApplication());
         Button saveButton = findViewById(R.id.termDetailSaveButton);
         Button removeButton = findViewById(R.id.termRemoveButton);
+        Button addCourseButton = findViewById(R.id.termDetailAddCourseToTermButton);
         String myFormat = "MM/dd/yy";
         SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
         editTitle = findViewById(R.id.editTextTermTitle);
@@ -92,10 +93,17 @@ public class TermDetail extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if(id == 0) {
-                    repository.insertTerm(new Term(id, editTitle.getText().toString(), editStartDate.getText().toString(), editEndDate.getText().toString()));
+                    repository.insertTerm(new Term(
+                            id,
+                            editTitle.getText().toString(),
+                            editStartDate.getText().toString(),
+                            editEndDate.getText().toString()));
                 }
                 else{
-                    repository.updateTerm(new Term(id, editTitle.getText().toString(), editStartDate.getText().toString(), editEndDate.getText().toString()));
+                    repository.updateTerm(new Term(id,
+                            editTitle.getText().toString(),
+                            editStartDate.getText().toString(),
+                            editEndDate.getText().toString()));
                 }
                 goToTermScreen(v);
             }
@@ -107,9 +115,17 @@ public class TermDetail extends AppCompatActivity {
                     deleteSelectedTerm(v);
                 }
                 else{
-                    Toast toast = Toast.makeText(getApplicationContext(), "Can't Remove Term until Associated Courses are Removed", Toast.LENGTH_LONG);
+                    Toast toast = Toast.makeText(getApplicationContext(),
+                            "Can't Remove Term until Associated Courses are Removed", Toast.LENGTH_LONG);
                     toast.show();
                 }
+            }
+        });
+        addCourseButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                goToCourseDetail(v);
+
             }
         });
         editStartDate.setOnClickListener(new View.OnClickListener() {
@@ -137,12 +153,42 @@ public class TermDetail extends AppCompatActivity {
                 updateDateLabel(editStartDate, calendarStart);
             }
         };
+        editEndDate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String info = editEndDate.getText().toString();
+                try{
+                    calendarEnd.setTime(sdf.parse(info));
+                }
+                catch (ParseException e){
+                    e.printStackTrace();
+                }
+                new DatePickerDialog(TermDetail.this, endDate,
+                        calendarEnd.get(Calendar.YEAR),
+                        calendarEnd.get(Calendar.MONTH),
+                        calendarEnd.get(Calendar.DAY_OF_MONTH)).show();
+            }
+        });
+        endDate = new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                calendarEnd.set(Calendar.YEAR, year);
+                calendarEnd.set(Calendar.MONTH, month);
+                calendarEnd.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+                updateDateLabel(editEndDate, calendarEnd);
+            }
+        };
 
     }
     public void goToTermScreen(View view){
         Intent intent = new Intent(TermDetail.this, TermScreen.class);
         startActivity(intent);
 
+    }
+    public void goToCourseDetail(View view){
+        Intent intent = new Intent(TermDetail.this, CourseScreen.class);
+        intent.putExtra("termID", id);
+        startActivity(intent);
     }
     public void deleteSelectedTerm(View view){
         id = getIntent().getIntExtra("id",0);
@@ -168,6 +214,5 @@ public class TermDetail extends AppCompatActivity {
         String myFormat = "MM/dd/yy";
         SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
         editText.setText(sdf.format(calendar.getTime()));
-
     }
 }
