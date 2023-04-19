@@ -165,35 +165,35 @@ public class CourseDetail extends AppCompatActivity {
             }
         };
     }
-        private void updateDateLabel(EditText editText, Calendar calendar){
-            String myFormat = "MM/dd/yy";
-            SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
-            editText.setText(sdf.format(calendar.getTime()));
-        }
-        private void insertCourse(){
-            repository.insertCourse(new Course(id,
-                    editTextCourseTitle.getText().toString(),
-                    editTextCourseStart.getText().toString(),
-                    statusField.getText().toString(),
-                    editTextCourseEnd.getText().toString(),
-                    profNameField.getText().toString(),
-                    profPhoneField.getText().toString(),
-                    profEmailField.getText().toString(),
-                    editNote.getText().toString(),
-                    termID));
-        }
-        private void updateCourse(){
-            repository.insertCourse(new Course(id,
-                    editTextCourseTitle.getText().toString(),
-                    editTextCourseStart.getText().toString(),
-                    statusField.getText().toString(),
-                    editTextCourseEnd.getText().toString(),
-                    profNameField.getText().toString(),
-                    profPhoneField.getText().toString(),
-                    profEmailField.getText().toString(),
-                    editNote.getText().toString(),
-                    termID));
-        }
+    private void updateDateLabel(EditText editText, Calendar calendar){
+        String myFormat = "MM/dd/yy";
+        SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
+        editText.setText(sdf.format(calendar.getTime()));
+    }
+    private void insertCourse(){
+        repository.insertCourse(new Course(id,
+                editTextCourseTitle.getText().toString(),
+                editTextCourseStart.getText().toString(),
+                statusField.getText().toString(),
+                editTextCourseEnd.getText().toString(),
+                profNameField.getText().toString(),
+                profPhoneField.getText().toString(),
+                profEmailField.getText().toString(),
+                editNote.getText().toString(),
+                termID));
+    }
+    private void updateCourse(){
+        repository.insertCourse(new Course(id,
+                editTextCourseTitle.getText().toString(),
+                editTextCourseStart.getText().toString(),
+                statusField.getText().toString(),
+                editTextCourseEnd.getText().toString(),
+                profNameField.getText().toString(),
+                profPhoneField.getText().toString(),
+                profEmailField.getText().toString(),
+                editNote.getText().toString(),
+                termID));
+    }
     private void goToCourseScreen(View view){
         Intent intent = new Intent(CourseDetail.this, CourseScreen.class);
         startActivity(intent);
@@ -202,6 +202,8 @@ public class CourseDetail extends AppCompatActivity {
         Intent intent = new Intent(CourseDetail.this, TermDetail.class);
         startActivity(intent);
     }
+
+
 }
 
 //    public boolean onCreateOptionsMenu(Menu menu){

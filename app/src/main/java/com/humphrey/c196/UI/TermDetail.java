@@ -20,6 +20,7 @@ import com.humphrey.c196.Database.Repository;
 import com.humphrey.c196.Entity.Course;
 import com.humphrey.c196.Entity.Term;
 import com.humphrey.c196.R;
+import com.humphrey.c196.Utility.Util;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -178,6 +179,25 @@ public class TermDetail extends AppCompatActivity {
                 updateDateLabel(editEndDate, calendarEnd);
             }
         };
+
+    }
+    @Override
+    protected void onResume(){
+        super.onResume();
+        if (Util.cacheCourses.size() != 0){
+            for(Course c : Util.cacheCourses){
+                if(!associatedCourses.contains(c)){
+                    associatedCourses.add(c);
+                }
+            }
+            Util.cacheCourses.clear();
+        }
+        RecyclerView recyclerView = findViewById(R.id.coursesInsideTermDetails);
+
+
+        final CourseAdapter courseAdapter = new CourseAdapter(this, id);
+        recyclerView.setAdapter(courseAdapter);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
     }
     public void goToTermScreen(View view){
