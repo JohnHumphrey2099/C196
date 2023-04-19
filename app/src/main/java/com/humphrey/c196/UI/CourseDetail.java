@@ -58,6 +58,7 @@ public class CourseDetail extends AppCompatActivity {
 // Get the class name of the component
         String className = componentName.getClassName();
         repository = new Repository(getApplication());
+// Assign fields
         Button saveButton = findViewById(R.id.courseDetailSaveButton);
         editTextCourseTitle = findViewById(R.id.editTextCourseTitle);
         editTextCourseStart = findViewById(R.id.editTextCourseStart);
@@ -103,6 +104,15 @@ public class CourseDetail extends AppCompatActivity {
                     } else {
                         updateCourse();
                     }
+                    goToTermDetail(v);
+                }
+                if (className.equals(courseScreen)){
+                    if (id == 0) {
+                        insertCourse();
+                    } else {
+                        updateCourse();
+                    }
+                    goToCourseScreen(v);
                 }
             }
         });
@@ -184,7 +194,16 @@ public class CourseDetail extends AppCompatActivity {
                     editNote.getText().toString(),
                     termID));
         }
+    private void goToCourseScreen(View view){
+        Intent intent = new Intent(CourseDetail.this, CourseScreen.class);
+        startActivity(intent);
     }
+    private void goToTermDetail(View view){
+        Intent intent = new Intent(CourseDetail.this, TermDetail.class);
+        startActivity(intent);
+    }
+}
+
 //    public boolean onCreateOptionsMenu(Menu menu){
 //        getMenuInflater().inflate(R.menu.menu_termdetails, menu);
 //        return true;
