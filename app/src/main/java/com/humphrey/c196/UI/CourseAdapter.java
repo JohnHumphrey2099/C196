@@ -60,6 +60,7 @@ public class CourseAdapter extends RecyclerView.Adapter<CourseAdapter.CourseView
                     else{
                         intent.putExtra("termID", termID);
                     }
+                    intent.putExtra("position", position);
                     context.startActivity(intent);
                 }
             });

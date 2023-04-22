@@ -40,7 +40,8 @@ public class TermDetail extends AppCompatActivity {
     final Calendar calendarEnd = Calendar.getInstance();
     int id;
     Repository repository;
-    List<Course> associatedCourses = new ArrayList<>();
+    CourseAdapter courseAdapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,23 +56,19 @@ public class TermDetail extends AppCompatActivity {
         editTitle = findViewById(R.id.editTextTermTitle);
         editStartDate = findViewById(R.id.editTextTermStart);
         editEndDate = findViewById(R.id.editTextTermEnd);
-        TextView label = findViewById(R.id.labelCurrentCourses);
+        Util.cacheCourses.clear();
         RecyclerView recyclerView = findViewById(R.id.coursesInsideTermDetails);
 
-        final CourseAdapter courseAdapter = new CourseAdapter(this, id);
+        courseAdapter = new CourseAdapter(this, id);
         recyclerView.setAdapter(courseAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-
-        if (id == 0){
-            label.setText("Available Courses");
-
-            removeButton.setEnabled(false);
+        //get associated courses
+        if (id != 0){
+            for (Course c : repository.getAllCourses()) {
+                if (c.getTermID() == id) Util.cacheCourses.add(c);
+            }
         }
-        else{
-            label.setText("Assigned Courses");
-            removeButton.setEnabled(true);
-        }
-
+        courseAdapter.setCourseList(Util.cacheCourses);
         //set the EditText Views
         if (id == 0){
             editStartDate.setText(sdf.format(new Date()));
@@ -83,11 +80,7 @@ public class TermDetail extends AppCompatActivity {
             editTitle.setText(getIntent().getStringExtra("title").toString());
         }
 
-        //get associated courses
-        for (Course c : repository.getAllCourses()) {
-            if (c.getTermID() == id) associatedCourses.add(c);
-        }
-        courseAdapter.setCourseList(associatedCourses);
+
 
         // set up buttons
         saveButton.setOnClickListener(new View.OnClickListener() {
@@ -112,7 +105,7 @@ public class TermDetail extends AppCompatActivity {
         removeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(associatedCourses.size() == 0) {
+                if(Util.cacheCourses.size() == 0) {
                     deleteSelectedTerm(v);
                 }
                 else{
@@ -184,6 +177,10 @@ public class TermDetail extends AppCompatActivity {
     @Override
     protected void onResume(){
         super.onResume();
+        if (id == 0){
+            courseAdapter.setCourseList(Util.cacheCourses);
+        }
+
         if (Util.cacheCourses.size() != 0){
             for(Course c : Util.cacheCourses){
                 if(!associatedCourses.contains(c)){

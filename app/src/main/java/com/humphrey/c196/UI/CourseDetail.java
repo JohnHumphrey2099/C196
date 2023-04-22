@@ -41,6 +41,7 @@ public class CourseDetail extends AppCompatActivity {
     final Calendar calendarEnd = Calendar.getInstance();
     int id;
     int termID;
+    int position;
     String termDetails = "com.humphrey.c196.UI.TermDetail";
     String courseScreen = "com.humphrey.c196.UI.CourseDetail";
     String assessmentDetails = "com.humphrey.c196.UI.assessmentDetail";
@@ -71,10 +72,12 @@ public class CourseDetail extends AppCompatActivity {
 
         RecyclerView recyclerView = findViewById(R.id.assessmentsRecycler);
         id = getIntent().getIntExtra("id", 0);
+        termID = getIntent().getIntExtra("termID", 0);
+        position = getIntent().getIntExtra("position", 0);
         final AssessmentAdapter assessmentAdapter = new AssessmentAdapter(this, id);
         recyclerView.setAdapter(assessmentAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        termID = getIntent().getIntExtra("termID", 0);
+
         if (id == 0) {
             editTextCourseStart.setText(sdf.format(new Date()));
             editTextCourseEnd.setText(sdf.format(new Date()));
