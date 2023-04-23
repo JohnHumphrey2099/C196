@@ -14,6 +14,8 @@ import com.humphrey.c196.Utility.Util;
 
 import java.util.List;
 import java.util.concurrent.ExecutorService;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicLong;
 
 public class Repository {
 
@@ -44,11 +46,13 @@ public class Repository {
             termDAO.update(term);
         });
     }
-    public void insertTerm(Term term){
+    public int insertTerm(Term term){
+        AtomicInteger insertResult = new AtomicInteger();
         databaseExecutor.execute(()->{
-           termDAO.insert(term);
+            insertResult.set(termDAO.insert(term));
         });
-       Util.waitAsec();
+        Util.waitAsec();
+        return insertResult.get();
     }
     public void deleteTerm(Term term){
         databaseExecutor.execute(()->{
@@ -93,11 +97,13 @@ public class Repository {
             courseDAO.update(course);
         });
     }
-    public void insertCourse(Course course){
+    public int insertCourse(Course course){
+        AtomicInteger insertResult = new AtomicInteger();
         databaseExecutor.execute(()->{
-            courseDAO.insert(course);
+            insertResult.set(courseDAO.insert(course));
         });
         Util.waitAsec();
+        return insertResult.get();
     }
     public void deleteCourse(Course course){
         databaseExecutor.execute(()-> {

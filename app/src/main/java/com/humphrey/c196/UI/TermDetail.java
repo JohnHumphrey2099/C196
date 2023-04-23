@@ -18,6 +18,7 @@ import android.widget.Toast;
 
 import com.humphrey.c196.DAO.CourseDAO;
 import com.humphrey.c196.Database.Repository;
+import com.humphrey.c196.Entity.Assessment;
 import com.humphrey.c196.Entity.Course;
 import com.humphrey.c196.Entity.Term;
 import com.humphrey.c196.R;
@@ -88,11 +89,19 @@ public class TermDetail extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if(id == 0) {
-                    repository.insertTerm(new Term(
+                    id = (repository.insertTerm(new Term(
                             id,
                             editTitle.getText().toString(),
                             editStartDate.getText().toString(),
-                            editEndDate.getText().toString()));
+                            editEndDate.getText().toString())));
+                    for(Course c : Util.cacheCourses){
+                        c.setTermID(id);
+                        int courseID = (repository.insertCourse(c));
+                        for(Assessment assessment: c.getAssociatedAssessments()){
+                            assessment.setCourseID(courseID);
+                            repository.insertAssessment(assessment);
+                        }
+                    }
                 }
                 else{
                     repository.updateTerm(new Term(id,
@@ -100,6 +109,7 @@ public class TermDetail extends AppCompatActivity {
                             editStartDate.getText().toString(),
                             editEndDate.getText().toString()));
                 }
+                Util.cacheCourses.clear();
                 goToTermScreen(v);
             }
         });
@@ -185,8 +195,8 @@ public class TermDetail extends AppCompatActivity {
             Util.cacheCourses.clear();
             for (Course c : repository.getAllCourses()) {
                 if (c.getTermID() == id) Util.cacheCourses.add(c);
-                courseAdapter.notifyDataSetChanged();
             }
+            courseAdapter.notifyDataSetChanged();
         }
     }
     public void goToTermScreen(View view){

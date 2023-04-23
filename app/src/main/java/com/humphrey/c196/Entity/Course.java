@@ -1,7 +1,10 @@
 package com.humphrey.c196.Entity;
 
 import androidx.room.Entity;
+import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
+
+import java.util.ArrayList;
 
 @Entity(tableName = "Courses")
 public class Course {
@@ -16,7 +19,8 @@ public class Course {
     private String instructorName;
     private String instructorPhone;
     private String instructorEmail;
-
+    @Ignore
+    private ArrayList<Assessment> associatedAssessments;
     private int termID;
 
     public int getCourseID() {
@@ -99,7 +103,15 @@ public class Course {
         this.termID = termID;
     }
 
-    public Course(int courseID,String title, String startDate, String status, String endDate,
+    public ArrayList<Assessment> getAssociatedAssessments() {
+        return associatedAssessments;
+    }
+
+    public void setAssociatedAssessments(ArrayList<Assessment> associatedAssessments) {
+        this.associatedAssessments = associatedAssessments;
+    }
+
+    public Course(int courseID, String title, String startDate, String status, String endDate,
                   String instructorName, String instructorPhone, String instructorEmail, String note, int termID) {
         this.courseID = courseID;
         this.title = title;

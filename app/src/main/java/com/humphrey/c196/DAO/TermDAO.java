@@ -14,7 +14,7 @@ import java.util.List;
 @Dao
 public interface TermDAO {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    long insert(Term term);
+    int insert(Term term);
 
     @Update
     void update(Term term);
