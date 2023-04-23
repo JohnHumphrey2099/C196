@@ -16,6 +16,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.humphrey.c196.DAO.CourseDAO;
 import com.humphrey.c196.Database.Repository;
 import com.humphrey.c196.Entity.Course;
 import com.humphrey.c196.Entity.Term;
@@ -178,24 +179,15 @@ public class TermDetail extends AppCompatActivity {
     protected void onResume(){
         super.onResume();
         if (id == 0){
-            courseAdapter.setCourseList(Util.cacheCourses);
+            courseAdapter.notifyDataSetChanged();
         }
-
-        if (Util.cacheCourses.size() != 0){
-            for(Course c : Util.cacheCourses){
-                if(!associatedCourses.contains(c)){
-                    associatedCourses.add(c);
-                }
-            }
+        else{
             Util.cacheCourses.clear();
+            for (Course c : repository.getAllCourses()) {
+                if (c.getTermID() == id) Util.cacheCourses.add(c);
+                courseAdapter.notifyDataSetChanged();
+            }
         }
-        RecyclerView recyclerView = findViewById(R.id.coursesInsideTermDetails);
-
-
-        final CourseAdapter courseAdapter = new CourseAdapter(this, id);
-        recyclerView.setAdapter(courseAdapter);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-
     }
     public void goToTermScreen(View view){
         Intent intent = new Intent(TermDetail.this, TermScreen.class);
@@ -208,7 +200,6 @@ public class TermDetail extends AppCompatActivity {
         startActivity(intent);
     }
     public void deleteSelectedTerm(View view){
-        id = getIntent().getIntExtra("id",0);
         repository.deleteTerm(new Term(id, null, null, null));
         goToTermScreen(view);
     }
