@@ -16,6 +16,8 @@ public class AssessmentDetail extends AppCompatActivity {
         setContentView(R.layout.activity_assessment_detail);
         id = getIntent().getIntExtra("id", 0);
         courseID = getIntent().getIntExtra("termID", 0);
-        position = getIntent().getIntExtra("position", 0);
+        position = getIntent().getIntExtra("position", 9999);
+
     }
+
 }

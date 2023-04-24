@@ -108,7 +108,8 @@ public class Course {
     }
 
     public void setAssociatedAssessments(ArrayList<Assessment> associatedAssessments) {
-        this.associatedAssessments = associatedAssessments;
+        ArrayList<Assessment> temp = new ArrayList<>(associatedAssessments);
+        this.associatedAssessments = temp;
     }
 
     public Course(int courseID, String title, String startDate, String status, String endDate,

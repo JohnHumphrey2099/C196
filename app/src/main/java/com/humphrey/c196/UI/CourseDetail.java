@@ -19,6 +19,7 @@ import com.humphrey.c196.Entity.Course;
 import com.humphrey.c196.R;
 import com.humphrey.c196.Utility.Util;
 
+import java.lang.reflect.Array;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -48,9 +49,7 @@ public class CourseDetail extends AppCompatActivity {
     String courseScreen = "com.humphrey.c196.UI.CourseDetail";
     String assessmentDetails = "com.humphrey.c196.UI.assessmentDetail";
     Repository repository;
-
     AssessmentAdapter assessmentAdapter;
-    ArrayList<Assessment> associatedAssessments = new ArrayList<>();
     String myFormat = "MM/dd/yy";
     SimpleDateFormat sdf = new SimpleDateFormat(myFormat,Locale.US);
     @Override
@@ -82,22 +81,28 @@ public class CourseDetail extends AppCompatActivity {
         recyclerView.setAdapter(assessmentAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 //Populate Fields.
-        if (id == 0) {
-            editTextCourseStart.setText(sdf.format(new Date()));
-            editTextCourseEnd.setText(sdf.format(new Date()));
-            if (position == 9999){
-                Util.cacheAssessments.clear();
+        if (id == 0) { //if a unsaved course
+            if (position == 9999){ // if brand new, not coming from list click
+                editTextCourseStart.setText(sdf.format(new Date())); //set date to today
+                editTextCourseEnd.setText(sdf.format(new Date())); // set date to today
+                Util.cacheAssessments.clear(); // clear any outdated assessments
             }
-            else{
-                Util.cacheAssessments.clear();
-                Util.cacheAssessments.addAll(associatedAssessments);
+            else{ // unsaved but coming from the list
+                if(getIntent().getStringExtra("start") == null){
+                    editTextCourseStart.setText(sdf.format(new Date()));
+                    editTextCourseEnd.setText(sdf.format(new Date()));
+                } //if there's no date saved, get a new date
+                else{
+                    editTextCourseStart.setText((getIntent().getStringExtra("start")));
+                    editTextCourseEnd.setText((getIntent().getStringExtra("end")));
+                } //use the saved date if there is a date saved
+                Util.cacheAssessments.clear(); // clear out any outdated assessments
+                ArrayList<Assessment> temp = new ArrayList<>((Util.cacheCourses.get(position)).getAssociatedAssessments()); // make a copy of associated assessments from the object to not disturb original
+                Util.cacheAssessments.addAll(temp);
             }
-            associatedAssessments.clear();
             assessmentAdapter.setAssessmentList(Util.cacheAssessments);
         }
         else {
-            editTextCourseStart.setText((getIntent().getStringExtra("start")));
-            editTextCourseEnd.setText((getIntent().getStringExtra("end")));
             editTextCourseTitle.setText((getIntent().getStringExtra("title")));
             statusField.setText(getIntent().getStringExtra("status"));
             profNameField.setText(getIntent().getStringExtra("name"));
@@ -118,7 +123,7 @@ public class CourseDetail extends AppCompatActivity {
             public void onClick(View v) {
                 if (termID ==0){
                     if(position == 9999){
-                        associatedAssessments.addAll(Util.cacheAssessments);
+                        ArrayList<Assessment> temp = new ArrayList<>(Util.cacheAssessments);
                         Course course = new Course(id,
                                 editTextCourseTitle.getText().toString(),
                                 editTextCourseStart.getText().toString(),
@@ -129,13 +134,11 @@ public class CourseDetail extends AppCompatActivity {
                                 profEmailField.getText().toString(),
                                 editNote.getText().toString(),
                                 termID);
-                        course.setAssociatedAssessments(associatedAssessments);
+                        course.setAssociatedAssessments(Util.cacheAssessments);
                         Util.cacheCourses.add(course);
                         Util.cacheAssessments.clear();
                     }
                     else{
-                        associatedAssessments.addAll(Util.cacheAssessments);
-                        Util.cacheAssessments.clear();
                         Course course = Util.cacheCourses.get(position);
                         course.setTitle(editTextCourseTitle.getText().toString());
                         course.setStartDate(editTextCourseStart.getText().toString());
@@ -144,10 +147,13 @@ public class CourseDetail extends AppCompatActivity {
                         course.setInstructorName(profNameField.getText().toString());
                         course.setInstructorPhone(profPhoneField.getText().toString());
                         course.setNote(editNote.getText().toString());
+                        course.setAssociatedAssessments(Util.cacheAssessments);
+                        Util.cacheAssessments.clear();
                     }
                 }
-                else{
-                    if (id ==0){
+                else{//if we do have a term ID
+                    if (id ==0){//if we have term id but course is unsaved
+                        //insert the course and return the primaryKey.
                        int courseID = (int)repository.insertCourse(new Course(id,
                                 editTextCourseTitle.getText().toString(),
                                 editTextCourseStart.getText().toString(),
@@ -161,9 +167,11 @@ public class CourseDetail extends AppCompatActivity {
                        for (Assessment a : Util.cacheAssessments){
                            a.setCourseID(courseID);
                            repository.insertAssessment(a);
-                       }
+                       } //save all cached assessments including courseID
                     }
-                    else{
+                    else{ //if we have a term id AND the course is already saved
+                        // update the course in the db.
+                        //don't worry about assessments, those would have already been inserted when saving on assessment screen
                         repository.updateCourse(new Course(id,
                                 editTextCourseTitle.getText().toString(),
                                 editTextCourseStart.getText().toString(),
@@ -232,15 +240,16 @@ public class CourseDetail extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        if(id!=0){
+        if(id!=0){ //if the course is saved, then the assessment should have saved to db upon saving
             Util.cacheAssessments.clear();
             for(Assessment a : repository.getAllAssessments()){
                 if(a.getCourseID() == id){
                     Util.cacheAssessments.add(a);
                 }
             }
-            assessmentAdapter.notifyDataSetChanged();
         }
+        //if course isn't saved, assessment was added to cached assessments. adapter already pointed to cached assessments
+        assessmentAdapter.notifyDataSetChanged();
     }
     private void updateDateLabel(EditText editText, Calendar calendar){
         String myFormat = "MM/dd/yy";
