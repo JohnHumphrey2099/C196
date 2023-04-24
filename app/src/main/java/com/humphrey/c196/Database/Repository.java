@@ -46,8 +46,8 @@ public class Repository {
             termDAO.update(term);
         });
     }
-    public int insertTerm(Term term){
-        AtomicInteger insertResult = new AtomicInteger();
+    public long insertTerm(Term term){
+        AtomicLong insertResult = new AtomicLong();
         databaseExecutor.execute(()->{
             insertResult.set(termDAO.insert(term));
         });
@@ -97,8 +97,8 @@ public class Repository {
             courseDAO.update(course);
         });
     }
-    public int insertCourse(Course course){
-        AtomicInteger insertResult = new AtomicInteger();
+    public long insertCourse(Course course){
+        AtomicLong insertResult = new AtomicLong();
         databaseExecutor.execute(()->{
             insertResult.set(courseDAO.insert(course));
         });

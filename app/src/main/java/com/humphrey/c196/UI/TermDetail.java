@@ -82,21 +82,19 @@ public class TermDetail extends AppCompatActivity {
             editTitle.setText(getIntent().getStringExtra("title").toString());
         }
 
-
-
-        // set up buttons
+// set up buttons///////////////////////////////////////////////////////////
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if(id == 0) {
-                    id = (repository.insertTerm(new Term(
+                    id = (int)(repository.insertTerm(new Term(
                             id,
                             editTitle.getText().toString(),
                             editStartDate.getText().toString(),
                             editEndDate.getText().toString())));
                     for(Course c : Util.cacheCourses){
                         c.setTermID(id);
-                        int courseID = (repository.insertCourse(c));
+                        int courseID = (int)(repository.insertCourse(c));
                         for(Assessment assessment: c.getAssociatedAssessments()){
                             assessment.setCourseID(courseID);
                             repository.insertAssessment(assessment);
@@ -205,7 +203,7 @@ public class TermDetail extends AppCompatActivity {
 
     }
     public void goToCourseDetail(View view){
-        Intent intent = new Intent(TermDetail.this, CourseScreen.class);
+        Intent intent = new Intent(TermDetail.this, CourseDetail.class);
         intent.putExtra("termID", id);
         startActivity(intent);
     }

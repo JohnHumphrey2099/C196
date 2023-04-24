@@ -21,6 +21,7 @@ import com.humphrey.c196.Utility.Util;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -49,7 +50,7 @@ public class CourseDetail extends AppCompatActivity {
     Repository repository;
 
     AssessmentAdapter assessmentAdapter;
-    List<Assessment> associatedAssessments;
+    ArrayList<Assessment> associatedAssessments = new ArrayList<>();
     String myFormat = "MM/dd/yy";
     SimpleDateFormat sdf = new SimpleDateFormat(myFormat,Locale.US);
     @Override
@@ -86,15 +87,15 @@ public class CourseDetail extends AppCompatActivity {
             editTextCourseEnd.setText(sdf.format(new Date()));
             if (position == 9999){
                 Util.cacheAssessments.clear();
-                assessmentAdapter.setAssessmentList(Util.cacheAssessments);
             }
             else{
+                Util.cacheAssessments.clear();
                 Util.cacheAssessments.addAll(associatedAssessments);
             }
             associatedAssessments.clear();
             assessmentAdapter.setAssessmentList(Util.cacheAssessments);
-
-        } else {
+        }
+        else {
             editTextCourseStart.setText((getIntent().getStringExtra("start")));
             editTextCourseEnd.setText((getIntent().getStringExtra("end")));
             editTextCourseTitle.setText((getIntent().getStringExtra("title")));
@@ -103,7 +104,7 @@ public class CourseDetail extends AppCompatActivity {
             profPhoneField.setText(getIntent().getStringExtra("phone"));
             profEmailField.setText(getIntent().getStringExtra("email"));
             editNote.setText(getIntent().getStringExtra("note"));
-            //populate cacheAssessments with matching Assessments from DB
+//populate cacheAssessments with matching Assessments from db
             for(Assessment a : repository.getAllAssessments()){
                 if(a.getCourseID() == id){
                     Util.cacheAssessments.add(a);
@@ -118,17 +119,19 @@ public class CourseDetail extends AppCompatActivity {
                 if (termID ==0){
                     if(position == 9999){
                         associatedAssessments.addAll(Util.cacheAssessments);
-                        repository.insertCourse(new Course(id, getIntent().getStringExtra("title"),
-                                getIntent().getStringExtra("start"),
-                                getIntent().getStringExtra("status"),
-                                getIntent().getStringExtra("end"),
-                                getIntent().getStringExtra("name"),
-                                getIntent().getStringExtra("phone"),
-                                getIntent().getStringExtra("email"),
-                                getIntent().getStringExtra("note"),
-                                termID));
+                        Course course = new Course(id,
+                                editTextCourseTitle.getText().toString(),
+                                editTextCourseStart.getText().toString(),
+                                statusField.getText().toString(),
+                                editTextCourseEnd.getText().toString(),
+                                profNameField.getText().toString(),
+                                profPhoneField.getText().toString(),
+                                profEmailField.getText().toString(),
+                                editNote.getText().toString(),
+                                termID);
+                        course.setAssociatedAssessments(associatedAssessments);
+                        Util.cacheCourses.add(course);
                         Util.cacheAssessments.clear();
-                        finish();
                     }
                     else{
                         associatedAssessments.addAll(Util.cacheAssessments);
@@ -141,12 +144,11 @@ public class CourseDetail extends AppCompatActivity {
                         course.setInstructorName(profNameField.getText().toString());
                         course.setInstructorPhone(profPhoneField.getText().toString());
                         course.setNote(editNote.getText().toString());
-                        finish();
                     }
                 }
                 else{
                     if (id ==0){
-                       int courseID = repository.insertCourse(new Course(id,
+                       int courseID = (int)repository.insertCourse(new Course(id,
                                 editTextCourseTitle.getText().toString(),
                                 editTextCourseStart.getText().toString(),
                                 statusField.getText().toString(),
@@ -156,9 +158,25 @@ public class CourseDetail extends AppCompatActivity {
                                 profEmailField.getText().toString(),
                                 editNote.getText().toString(),
                                 termID));
-                       //TODO start here
+                       for (Assessment a : Util.cacheAssessments){
+                           a.setCourseID(courseID);
+                           repository.insertAssessment(a);
+                       }
+                    }
+                    else{
+                        repository.updateCourse(new Course(id,
+                                editTextCourseTitle.getText().toString(),
+                                editTextCourseStart.getText().toString(),
+                                statusField.getText().toString(),
+                                editTextCourseEnd.getText().toString(),
+                                profNameField.getText().toString(),
+                                profPhoneField.getText().toString(),
+                                profEmailField.getText().toString(),
+                                editNote.getText().toString(),
+                                termID));
                     }
                 }
+                finish();
             }
         });
 
@@ -214,17 +232,14 @@ public class CourseDetail extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        if (id == 0){
-            assessmentAdapter.setAssessmentList(Util.cacheAssessments);
-        }
-        else{
+        if(id!=0){
             Util.cacheAssessments.clear();
             for(Assessment a : repository.getAllAssessments()){
                 if(a.getCourseID() == id){
                     Util.cacheAssessments.add(a);
                 }
             }
-            assessmentAdapter.setAssessmentList(Util.cacheAssessments);
+            assessmentAdapter.notifyDataSetChanged();
         }
     }
     private void updateDateLabel(EditText editText, Calendar calendar){
