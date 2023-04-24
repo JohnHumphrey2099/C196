@@ -17,6 +17,7 @@ import com.humphrey.c196.Database.Repository;
 import com.humphrey.c196.Entity.Assessment;
 import com.humphrey.c196.Entity.Course;
 import com.humphrey.c196.R;
+import com.humphrey.c196.Utility.Util;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -46,6 +47,8 @@ public class CourseDetail extends AppCompatActivity {
     String courseScreen = "com.humphrey.c196.UI.CourseDetail";
     String assessmentDetails = "com.humphrey.c196.UI.assessmentDetail";
     Repository repository;
+
+    AssessmentAdapter assessmentAdapter;
     List<Assessment> associatedAssessments;
     String myFormat = "MM/dd/yy";
     SimpleDateFormat sdf = new SimpleDateFormat(myFormat,Locale.US);
@@ -69,18 +72,28 @@ public class CourseDetail extends AppCompatActivity {
         profPhoneField = findViewById(R.id.profPhoneField);
         profEmailField = findViewById(R.id.profEmailField);
         statusField = findViewById(R.id.statusField);
-
+//Create RecyclerView
         RecyclerView recyclerView = findViewById(R.id.assessmentsRecycler);
         id = getIntent().getIntExtra("id", 0);
         termID = getIntent().getIntExtra("termID", 0);
-        position = getIntent().getIntExtra("position", 0);
-        final AssessmentAdapter assessmentAdapter = new AssessmentAdapter(this, id);
+        position = getIntent().getIntExtra("position", 9999);
+        assessmentAdapter = new AssessmentAdapter(this, id);
         recyclerView.setAdapter(assessmentAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-
+//Populate Fields.
         if (id == 0) {
             editTextCourseStart.setText(sdf.format(new Date()));
             editTextCourseEnd.setText(sdf.format(new Date()));
+            if (position == 9999){
+                Util.cacheAssessments.clear();
+                assessmentAdapter.setAssessmentList(Util.cacheAssessments);
+            }
+            else{
+                Util.cacheAssessments.addAll(associatedAssessments);
+            }
+            associatedAssessments.clear();
+            assessmentAdapter.setAssessmentList(Util.cacheAssessments);
+
         } else {
             editTextCourseStart.setText((getIntent().getStringExtra("start")));
             editTextCourseEnd.setText((getIntent().getStringExtra("end")));
@@ -90,35 +103,65 @@ public class CourseDetail extends AppCompatActivity {
             profPhoneField.setText(getIntent().getStringExtra("phone"));
             profEmailField.setText(getIntent().getStringExtra("email"));
             editNote.setText(getIntent().getStringExtra("note"));
-        }
-        for (Assessment a : repository.getAllAssessments()) {
-            if (a.getCourseID() == id) {
-                associatedAssessments.add(a);
+            //populate cacheAssessments with matching Assessments from DB
+            for(Assessment a : repository.getAllAssessments()){
+                if(a.getCourseID() == id){
+                    Util.cacheAssessments.add(a);
+                }
             }
         }
-        assessmentAdapter.setAssessmentList(associatedAssessments);
+
         //set up buttons
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (className.equals(termDetails)) {
-                    if (id == 0) {
-                        insertCourse();
-                    } else {
-                        updateCourse();
+                if (termID ==0){
+                    if(position == 9999){
+                        associatedAssessments.addAll(Util.cacheAssessments);
+                        repository.insertCourse(new Course(id, getIntent().getStringExtra("title"),
+                                getIntent().getStringExtra("start"),
+                                getIntent().getStringExtra("status"),
+                                getIntent().getStringExtra("end"),
+                                getIntent().getStringExtra("name"),
+                                getIntent().getStringExtra("phone"),
+                                getIntent().getStringExtra("email"),
+                                getIntent().getStringExtra("note"),
+                                termID));
+                        Util.cacheAssessments.clear();
+                        finish();
                     }
-                    goToTermDetail(v);
+                    else{
+                        associatedAssessments.addAll(Util.cacheAssessments);
+                        Util.cacheAssessments.clear();
+                        Course course = Util.cacheCourses.get(position);
+                        course.setTitle(editTextCourseTitle.getText().toString());
+                        course.setStartDate(editTextCourseStart.getText().toString());
+                        course.setStatus(statusField.getText().toString());
+                        course.setEndDate(editTextCourseEnd.getText().toString());
+                        course.setInstructorName(profNameField.getText().toString());
+                        course.setInstructorPhone(profPhoneField.getText().toString());
+                        course.setNote(editNote.getText().toString());
+                        finish();
+                    }
                 }
-                if (className.equals(courseScreen)){
-                    if (id == 0) {
-                        insertCourse();
-                    } else {
-                        updateCourse();
+                else{
+                    if (id ==0){
+                       int courseID = repository.insertCourse(new Course(id,
+                                editTextCourseTitle.getText().toString(),
+                                editTextCourseStart.getText().toString(),
+                                statusField.getText().toString(),
+                                editTextCourseEnd.getText().toString(),
+                                profNameField.getText().toString(),
+                                profPhoneField.getText().toString(),
+                                profEmailField.getText().toString(),
+                                editNote.getText().toString(),
+                                termID));
+                       //TODO start here
                     }
-                    goToCourseScreen(v);
                 }
             }
         });
+
         editTextCourseStart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -167,6 +210,22 @@ public class CourseDetail extends AppCompatActivity {
                 updateDateLabel(editTextCourseEnd, calendarEnd);
             }
         };
+    }
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (id == 0){
+            assessmentAdapter.setAssessmentList(Util.cacheAssessments);
+        }
+        else{
+            Util.cacheAssessments.clear();
+            for(Assessment a : repository.getAllAssessments()){
+                if(a.getCourseID() == id){
+                    Util.cacheAssessments.add(a);
+                }
+            }
+            assessmentAdapter.setAssessmentList(Util.cacheAssessments);
+        }
     }
     private void updateDateLabel(EditText editText, Calendar calendar){
         String myFormat = "MM/dd/yy";
