@@ -88,34 +88,37 @@ public class CourseDetail extends AppCompatActivity {
                 Util.cacheAssessments.clear(); // clear any outdated assessments
             }
             else{ // unsaved but coming from the list
-                if(getIntent().getStringExtra("start") == null){
+                if(getIntent().getStringExtra("start") == null){//if no date set, set date to today
                     editTextCourseStart.setText(sdf.format(new Date()));
                     editTextCourseEnd.setText(sdf.format(new Date()));
-                } //if there's no date saved, get a new date
-                else{
+                }
+                else{//get the date from the saved course
                     editTextCourseStart.setText((getIntent().getStringExtra("start")));
                     editTextCourseEnd.setText((getIntent().getStringExtra("end")));
-                } //use the saved date if there is a date saved
+                }
                 Util.cacheAssessments.clear(); // clear out any outdated assessments
                 ArrayList<Assessment> temp = new ArrayList<>((Util.cacheCourses.get(position)).getAssociatedAssessments()); // make a copy of associated assessments from the object to not disturb original
                 Util.cacheAssessments.addAll(temp);
             }
-            assessmentAdapter.setAssessmentList(Util.cacheAssessments);
+
         }
-        else {
-            editTextCourseTitle.setText((getIntent().getStringExtra("title")));
-            statusField.setText(getIntent().getStringExtra("status"));
-            profNameField.setText(getIntent().getStringExtra("name"));
-            profPhoneField.setText(getIntent().getStringExtra("phone"));
-            profEmailField.setText(getIntent().getStringExtra("email"));
-            editNote.setText(getIntent().getStringExtra("note"));
-//populate cacheAssessments with matching Assessments from db
+        else {//course already saved
+            editTextCourseStart.setText((getIntent().getStringExtra("start")));
+            editTextCourseEnd.setText((getIntent().getStringExtra("end")));
+            //populate cacheAssessments with matching Assessments from db
             for(Assessment a : repository.getAllAssessments()){
                 if(a.getCourseID() == id){
                     Util.cacheAssessments.add(a);
                 }
             }
         }
+        editTextCourseTitle.setText((getIntent().getStringExtra("title")));
+        statusField.setText(getIntent().getStringExtra("status"));
+        profNameField.setText(getIntent().getStringExtra("name"));
+        profPhoneField.setText(getIntent().getStringExtra("phone"));
+        profEmailField.setText(getIntent().getStringExtra("email"));
+        editNote.setText(getIntent().getStringExtra("note"));
+        assessmentAdapter.setAssessmentList(Util.cacheAssessments);
 
         //set up buttons
         saveButton.setOnClickListener(new View.OnClickListener() {
