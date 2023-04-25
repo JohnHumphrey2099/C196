@@ -19,13 +19,11 @@ import com.humphrey.c196.Entity.Course;
 import com.humphrey.c196.R;
 import com.humphrey.c196.Utility.Util;
 
-import java.lang.reflect.Array;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
 import java.util.Locale;
 
 public class CourseDetail extends AppCompatActivity {
@@ -56,17 +54,13 @@ public class CourseDetail extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_course_detail);
-        Intent intent = getIntent();
-// Get the component that started the Intent
-        ComponentName componentName = intent.getComponent();
-// Get the class name of the component
-        String className = componentName.getClassName();
         repository = new Repository(getApplication());
 // Assign fields
-        Button saveButton = findViewById(R.id.courseDetailSaveButton);
+        Button saveButton = findViewById(R.id.courseSaveButton);
+        Button addAssessment = findViewById(R.id.addAssessment);
         editTextCourseTitle = findViewById(R.id.editTextCourseTitle);
         editTextCourseStart = findViewById(R.id.editTextCourseStart);
-        editTextCourseEnd = findViewById(R.id.editTextCourseEnd);
+        editTextCourseEnd = findViewById(R.id.editTextAssessmentEnd);
         editNote = findViewById(R.id.editNote);
         profNameField = findViewById(R.id.profNameField);
         profPhoneField = findViewById(R.id.profPhoneField);
@@ -188,6 +182,15 @@ public class CourseDetail extends AppCompatActivity {
                     }
                 }
                 finish();
+            }
+        });
+        addAssessment.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(CourseDetail.this, AssessmentDetail.class);
+                intent.putExtra("courseID", id);
+                startActivity(intent);
+
             }
         });
 

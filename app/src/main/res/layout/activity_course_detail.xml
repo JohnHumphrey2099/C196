@@ -27,7 +27,7 @@
                 android:layout_height="wrap_content">
 
                 <Button
-                    android:id="@+id/courseDetailSaveButton"
+                    android:id="@+id/courseSaveButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="30dp"
@@ -51,7 +51,7 @@
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/assessmentsRecycler"
                     android:layout_width="222dp"
-                    android:layout_height="233dp"
+                    android:layout_height="152dp"
                     android:background="@drawable/my_border_drawable"
                     app:layout_constraintEnd_toEndOf="@+id/editNote"
                     app:layout_constraintStart_toStartOf="@+id/editNote"
@@ -222,7 +222,7 @@
                     app:layout_constraintTop_toTopOf="@+id/labelCourseTitle" />
 
                 <EditText
-                    android:id="@+id/editTextCourseEnd"
+                    android:id="@+id/editTextAssessmentEnd"
                     android:layout_width="235dp"
                     android:layout_height="50dp"
                     android:ems="10"
@@ -243,6 +243,16 @@
                     android:textColor="@color/black"
                     app:layout_constraintEnd_toEndOf="@+id/assessmentsRecycler"
                     app:layout_constraintStart_toStartOf="@+id/assessmentsRecycler"
+                    app:layout_constraintTop_toBottomOf="@+id/editNote" />
+
+                <Button
+                    android:id="@+id/addAssessment"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Add Assessment"
+                    android:textSize="10sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/labelAssessmentsCourseDetail"
                     app:layout_constraintTop_toBottomOf="@+id/editNote" />
             </androidx.constraintlayout.widget.ConstraintLayout>
         </LinearLayout>

@@ -13,7 +13,6 @@ public class Assessment {
     private String type;
     private String startDate;
     private String endDate;
-
     private int courseID;
 
     public Assessment(int assessmentID, String title, String type, String startDate, String endDate, int courseID) {
