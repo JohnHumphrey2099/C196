@@ -30,12 +30,13 @@
                     android:id="@+id/courseSaveButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="30dp"
+                    android:layout_marginTop="648dp"
                     android:text="SAVE"
                     android:textSize="12sp"
                     app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.498"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/assessmentsRecycler" />
+                    app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
                     android:id="@+id/labelCourseStart"
@@ -73,7 +74,7 @@
                     android:id="@+id/profNameLabel"
                     android:layout_width="40dp"
                     android:layout_height="45dp"
-                    android:layout_marginTop="48dp"
+                    android:layout_marginTop="64dp"
                     android:gravity="center"
                     android:text="Instructor Name"
                     android:textColor="@color/black"
@@ -139,17 +140,16 @@
                     app:layout_constraintStart_toEndOf="@+id/profEmail"
                     app:layout_constraintTop_toBottomOf="@+id/profPhone" />
 
-                <EditText
-                    android:id="@+id/statusField"
-                    android:layout_width="235dp"
-                    android:layout_height="50dp"
-                    android:ems="10"
-                    android:hint="Select Course Status"
-                    android:inputType="textPersonName"
-                    android:textColorHint="@color/hintText"
-                    android:textSize="12sp"
+                <Spinner
+                    android:id="@+id/typeSpinner"
+                    android:layout_width="236dp"
+                    android:layout_height="57dp"
+                    android:layout_margin="0dp"
+                    android:background="@drawable/my_border_drawable"
+                    android:spinnerMode="dropdown"
                     app:layout_constraintStart_toEndOf="@+id/labelCourseStatus"
-                    app:layout_constraintTop_toBottomOf="@+id/labelCourseEnd" />
+                    app:layout_constraintTop_toBottomOf="@+id/labelCourseEnd"
+                    android:entries="@array/type_options"/>
 
                 <TextView
                     android:id="@+id/labelCourseTitle"

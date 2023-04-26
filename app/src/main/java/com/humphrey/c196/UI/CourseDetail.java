@@ -15,6 +15,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.humphrey.c196.Database.Repository;
@@ -38,10 +39,10 @@ public class CourseDetail extends AppCompatActivity {
     EditText profNameField;
     EditText profPhoneField;
     EditText profEmailField;
-    EditText statusField;
     EditText editTextCourseStart;
     EditText editTextCourseTitle;
     EditText editTextCourseEnd;
+    Spinner typeSpinner;
     DatePickerDialog.OnDateSetListener startDate;
     DatePickerDialog.OnDateSetListener endDate;
     final Calendar calendarStart = Calendar.getInstance();
@@ -79,7 +80,7 @@ public class CourseDetail extends AppCompatActivity {
         profNameField = findViewById(R.id.profNameField);
         profPhoneField = findViewById(R.id.profPhoneField);
         profEmailField = findViewById(R.id.profEmailField);
-        statusField = findViewById(R.id.statusField);
+        typeSpinner = findViewById(R.id.typeSpinner);
 //Create RecyclerView
         RecyclerView recyclerView = findViewById(R.id.assessmentsRecycler);
         id = getIntent().getIntExtra("id", 0);
