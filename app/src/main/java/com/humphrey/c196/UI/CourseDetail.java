@@ -12,6 +12,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -50,9 +51,7 @@ public class CourseDetail extends AppCompatActivity {
     int id;
     int termID;
     int position;
-    String termDetails = "com.humphrey.c196.UI.TermDetail";
-    String courseScreen = "com.humphrey.c196.UI.CourseDetail";
-    String assessmentDetails = "com.humphrey.c196.UI.assessmentDetail";
+    String selectedStatus;
     Repository repository;
     AssessmentAdapter assessmentAdapter;
     String myFormat = "MM/dd/yy";
@@ -80,7 +79,13 @@ public class CourseDetail extends AppCompatActivity {
         profNameField = findViewById(R.id.profNameField);
         profPhoneField = findViewById(R.id.profPhoneField);
         profEmailField = findViewById(R.id.profEmailField);
+
+//create Spinner
         typeSpinner = findViewById(R.id.typeSpinner);
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
+                R.array.type_options, android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        typeSpinner.setAdapter(adapter);
 //Create RecyclerView
         RecyclerView recyclerView = findViewById(R.id.assessmentsRecycler);
         id = getIntent().getIntExtra("id", 0);
@@ -89,6 +94,7 @@ public class CourseDetail extends AppCompatActivity {
         assessmentAdapter = new AssessmentAdapter(this, id);
         recyclerView.setAdapter(assessmentAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
 //Populate Fields.
         if (id == 0) { //if a unsaved course
             if (position == 9999){ // if brand new, not coming from list click
@@ -122,7 +128,20 @@ public class CourseDetail extends AppCompatActivity {
             }
         }
         editTextCourseTitle.setText((getIntent().getStringExtra("title")));
-        statusField.setText(getIntent().getStringExtra("status"));
+        //get status from intent
+        if(getIntent().getStringExtra("status")!= null){
+            selectedStatus = getIntent().getStringExtra("status");
+            int index = 0;
+            String[] items = getResources().getStringArray(R.array.type_options);
+            for (int i = 0; i < items.length; i++) {
+                if (items[i].equals(selectedStatus)) {
+                    index = i;
+                    break;
+                }
+            }
+// set the selected item of the spinner
+            typeSpinner.setSelection(index);
+        }
         profNameField.setText(getIntent().getStringExtra("name"));
         profPhoneField.setText(getIntent().getStringExtra("phone"));
         profEmailField.setText(getIntent().getStringExtra("email"));
@@ -139,7 +158,7 @@ public class CourseDetail extends AppCompatActivity {
                         Course course = new Course(id,
                                 editTextCourseTitle.getText().toString(),
                                 editTextCourseStart.getText().toString(),
-                                statusField.getText().toString(),
+                                typeSpinner.getSelectedItem().toString(),
                                 editTextCourseEnd.getText().toString(),
                                 profNameField.getText().toString(),
                                 profPhoneField.getText().toString(),
@@ -154,7 +173,7 @@ public class CourseDetail extends AppCompatActivity {
                         Course course = Util.cacheCourses.get(position);
                         course.setTitle(editTextCourseTitle.getText().toString());
                         course.setStartDate(editTextCourseStart.getText().toString());
-                        course.setStatus(statusField.getText().toString());
+                        course.setStatus(typeSpinner.getSelectedItem().toString());
                         course.setEndDate(editTextCourseEnd.getText().toString());
                         course.setInstructorName(profNameField.getText().toString());
                         course.setInstructorPhone(profPhoneField.getText().toString());
@@ -169,7 +188,7 @@ public class CourseDetail extends AppCompatActivity {
                        int courseID = (int)repository.insertCourse(new Course(id,
                                 editTextCourseTitle.getText().toString(),
                                 editTextCourseStart.getText().toString(),
-                                statusField.getText().toString(),
+                                typeSpinner.getSelectedItem().toString(),
                                 editTextCourseEnd.getText().toString(),
                                 profNameField.getText().toString(),
                                 profPhoneField.getText().toString(),
@@ -187,7 +206,7 @@ public class CourseDetail extends AppCompatActivity {
                         repository.updateCourse(new Course(id,
                                 editTextCourseTitle.getText().toString(),
                                 editTextCourseStart.getText().toString(),
-                                statusField.getText().toString(),
+                                typeSpinner.getSelectedItem().toString(),
                                 editTextCourseEnd.getText().toString(),
                                 profNameField.getText().toString(),
                                 profPhoneField.getText().toString(),

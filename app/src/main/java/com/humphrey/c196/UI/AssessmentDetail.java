@@ -4,7 +4,6 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.DatePickerDialog;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -12,10 +11,11 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 
 import com.humphrey.c196.Database.Repository;
 import com.humphrey.c196.Entity.Assessment;
-import com.humphrey.c196.Entity.Term;
 import com.humphrey.c196.R;
 import com.humphrey.c196.Utility.Util;
 
@@ -31,7 +31,6 @@ public class AssessmentDetail extends AppCompatActivity {
     private int position;
     String myFormat = "MM/dd/yy";
     EditText title;
-    EditText type;
     EditText startDate;
     EditText endDate;
     SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
@@ -39,6 +38,10 @@ public class AssessmentDetail extends AppCompatActivity {
     DatePickerDialog.OnDateSetListener endPicker;
     final Calendar calendarStart = Calendar.getInstance();
     final Calendar calendarEnd = Calendar.getInstance();
+    RadioGroup radioGroup;
+    RadioButton performanceButton;
+    RadioButton objectiveButton;
+    String type;
     Repository repository;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,13 +60,28 @@ public class AssessmentDetail extends AppCompatActivity {
         courseID = getIntent().getIntExtra("courseID", 0);
         position = getIntent().getIntExtra("position", 9999);
         title = findViewById(R.id.editTextAssessmentTitle);
-        type = findViewById(R.id.editTextAssessmentType);
         startDate = findViewById(R.id.editTextAssessmentStart);
         endDate = findViewById(R.id.editTextAssessmentEnd);
         Button saveButton = findViewById(R.id.saveAssessment);
-        //set fields////////////////////////////////////////////////////////////
+        radioGroup = findViewById(R.id.radio_group);
+        performanceButton = findViewById(R.id.radio_performance);
+        objectiveButton = findViewById(R.id.radio_objective);
+        //set performance button to true by default
+        performanceButton.setChecked(true);
+        type = "Performance";
+//set fields////////////////////////////////////////////////////////////
         title.setText(getIntent().getStringExtra("title"));
-        type.setText(getIntent().getStringExtra("type"));
+        //set the radio button from saved type, if type is not null
+        if(getIntent().getStringExtra("type") != null){
+            String temp = getIntent().getStringExtra("type");
+            if (temp.equals("Performance")) {
+                performanceButton.setChecked(true);
+                type = "Performance";
+            } else if (temp.equals("Objective")) {
+                objectiveButton.setChecked(true);
+                type = "Objective";
+            }
+        }
 
         // date field logic
         if(id == 0) {//unsaved assessment
@@ -141,7 +159,7 @@ public class AssessmentDetail extends AppCompatActivity {
                     if(position == 9999){
                         Assessment assessment = new Assessment(id,
                                 title.getText().toString(),
-                                type.getText().toString(),
+                                type,
                                 startDate.getText().toString(),
                                 endDate.getText().toString(),courseID);
                         Util.cacheAssessments.add(assessment);
@@ -149,7 +167,7 @@ public class AssessmentDetail extends AppCompatActivity {
                     else{
                         Assessment assessment = Util.cacheAssessments.get(position);
                         assessment.setTitle(title.getText().toString());
-                        assessment.setType(type.getText().toString());
+                        assessment.setType(type);
                         assessment.setStartDate(startDate.getText().toString());
                         assessment.setEndDate(endDate.getText().toString());
                     }
@@ -157,18 +175,25 @@ public class AssessmentDetail extends AppCompatActivity {
                 else{
                     if(id == 0){
                         repository.insertAssessment(new Assessment(id,
-                                title.getText().toString(), type.getText().toString(),
+                                title.getText().toString(), type,
                                 startDate.getText().toString(),
                                 endDate.getText().toString(), courseID));
                     }
                     else{
                         repository.updateAssessment(new Assessment(id,
-                                title.getText().toString(), type.getText().toString(),
+                                title.getText().toString(), type,
                                 startDate.getText().toString(),
                                 endDate.getText().toString(), courseID));
                     }
                 }
                 finish();
+            }
+        });
+        radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup radioGroup, int checkedId) {
+                RadioButton selectedRadio = findViewById(checkedId);
+                type = selectedRadio.getText().toString();
             }
         });
     }

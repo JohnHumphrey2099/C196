@@ -30,13 +30,12 @@
                     android:id="@+id/saveAssessment"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="120dp"
                     android:text="SAVE"
                     android:textSize="12sp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.498"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/editTextAssessmentType" />
+                    app:layout_constraintTop_toBottomOf="@+id/radio_group" />
 
                 <TextView
                     android:id="@+id/labelCourseStart"
@@ -48,18 +47,6 @@
                     android:textSize="12sp"
                     app:layout_constraintStart_toStartOf="@+id/labelCourseTitle"
                     app:layout_constraintTop_toBottomOf="@+id/labelCourseTitle" />
-
-                <EditText
-                    android:id="@+id/editTextAssessmentType"
-                    android:layout_width="235dp"
-                    android:layout_height="50dp"
-                    android:ems="10"
-                    android:hint="Select Assessment Type"
-                    android:inputType="textPersonName"
-                    android:textColorHint="@color/hintText"
-                    android:textSize="12sp"
-                    app:layout_constraintStart_toEndOf="@+id/labelCourseStatus"
-                    app:layout_constraintTop_toBottomOf="@+id/labelCourseEnd" />
 
                 <TextView
                     android:id="@+id/labelCourseTitle"
@@ -132,6 +119,27 @@
                     android:textSize="12sp"
                     app:layout_constraintStart_toEndOf="@+id/labelCourseEnd"
                     app:layout_constraintTop_toBottomOf="@+id/labelCourseStart" />
+
+                <RadioGroup
+                    android:id="@+id/radio_group"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintStart_toEndOf="@+id/labelCourseStatus"
+                    app:layout_constraintTop_toBottomOf="@+id/labelCourseEnd">
+
+                    <RadioButton
+                        android:id="@+id/radio_performance"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Performance" />
+
+                    <RadioButton
+                        android:id="@+id/radio_objective"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Objective" />
+
+                </RadioGroup>
 
             </androidx.constraintlayout.widget.ConstraintLayout>
         </LinearLayout>
