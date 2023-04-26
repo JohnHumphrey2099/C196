@@ -1,9 +1,13 @@
 package com.humphrey.c196.UI;
 
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.DatePickerDialog;
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -11,6 +15,7 @@ import android.widget.EditText;
 
 import com.humphrey.c196.Database.Repository;
 import com.humphrey.c196.Entity.Assessment;
+import com.humphrey.c196.Entity.Term;
 import com.humphrey.c196.R;
 import com.humphrey.c196.Utility.Util;
 
@@ -34,11 +39,20 @@ public class AssessmentDetail extends AppCompatActivity {
     DatePickerDialog.OnDateSetListener endPicker;
     final Calendar calendarStart = Calendar.getInstance();
     final Calendar calendarEnd = Calendar.getInstance();
+    Repository repository;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        ActionBar actionBar = getSupportActionBar();
+        //set title of action bar
+        if(getIntent().getStringExtra("title") == null){
+            actionBar.setTitle("New Assessment");
+        }
+        else{
+            actionBar.setTitle(getIntent().getStringExtra("title"));
+        }
         setContentView(R.layout.activity_assessment_detail);
-        Repository repository = new Repository(getApplication());
+        repository = new Repository(getApplication());
         id = getIntent().getIntExtra("id", 0);
         courseID = getIntent().getIntExtra("courseID", 0);
         position = getIntent().getIntExtra("position", 9999);
@@ -162,5 +176,25 @@ public class AssessmentDetail extends AppCompatActivity {
         String myFormat = "MM/dd/yy";
         SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
         editText.setText(sdf.format(calendar.getTime()));
+    }
+    public boolean onCreateOptionsMenu(Menu menu){
+        getMenuInflater().inflate(R.menu.menu_assessmentdetails, menu);
+        return true;
+    }
+    public boolean onOptionsItemSelected(MenuItem item){
+        switch (item.getItemId()){
+            case R.id.removeAssessment:
+                if(id !=0){
+                    repository.deleteAssessment(new Assessment(id, null, null, null, null, courseID));
+                    finish();
+                }
+                else{
+                    if(position == 0){
+                        Util.cacheAssessments.remove(position);
+                    }
+                    finish();
+                }
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

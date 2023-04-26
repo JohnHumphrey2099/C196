@@ -33,6 +33,12 @@ public class MainActivity extends AppCompatActivity {
         for (Term t : deleteTerms){
             r.deleteTerm(t);
         }
+        for (Course c : r.getAllCourses()){
+            r.deleteCourse(c);
+        }
+        for(Assessment a : r.getAllAssessments()){
+            r.deleteAssessment(a);
+        }
     }
 
     public void goToTermScreen(View view){

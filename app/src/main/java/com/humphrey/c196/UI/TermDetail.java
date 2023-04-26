@@ -1,5 +1,6 @@
 package com.humphrey.c196.UI;
 
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -47,11 +48,19 @@ public class TermDetail extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        ActionBar actionBar = getSupportActionBar();
+        //set title of action bar
+        if(getIntent().getStringExtra("title") == null){
+            actionBar.setTitle("New Term");
+        }
+        else{
+            actionBar.setTitle(getIntent().getStringExtra("title"));
+        }
         setContentView(R.layout.activity_term_detail);
         id = getIntent().getIntExtra("id",0);
         repository = new Repository(getApplication());
         Button saveButton = findViewById(R.id.termDetailSaveButton);
-        Button removeButton = findViewById(R.id.termRemoveButton);
+
         Button addCourseButton = findViewById(R.id.termDetailAddCourseToTermButton);
         String myFormat = "MM/dd/yy";
         SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
@@ -111,19 +120,7 @@ public class TermDetail extends AppCompatActivity {
                 goToTermScreen(v);
             }
         });
-        removeButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(Util.cacheCourses.size() == 0) {
-                    deleteSelectedTerm(v);
-                }
-                else{
-                    Toast toast = Toast.makeText(getApplicationContext(),
-                            "Can't Remove Term until Associated Courses are Removed", Toast.LENGTH_LONG);
-                    toast.show();
-                }
-            }
-        });
+
         addCourseButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -219,10 +216,37 @@ public class TermDetail extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item){
         switch (item.getItemId()){
             case R.id.removeTerm:
-                id = getIntent().getIntExtra("id",0);
-                repository.deleteTerm(new Term(id, null, null, null));
-                Intent intent = new Intent(TermDetail.this, TermScreen.class);
-                startActivity(intent);
+                if (id != 0){
+                    //Term has been saved
+                    ArrayList<Course> temp = new ArrayList<>();
+                    for(Course c : repository.getAllCourses()){
+                        if(c.getTermID() == id){
+                            temp.add(c);
+                        }
+                    }
+                    //if no assigned courses
+                    if(temp.size()==0 && Util.cacheCourses.size()==0) {
+                        repository.deleteTerm(new Term(id, null, null, null));
+                        finish();
+                    }
+                    //term saved but has assigned courses
+                    else{
+                        Toast.makeText(getApplicationContext(), "Cannot delete until all courses assessments are deleted.",
+                                Toast.LENGTH_LONG).show();
+                    }
+                }
+                //term has not been saved
+                else{
+                    //term has not been saved but has cached courses
+                    if(Util.cacheCourses.size() != 0){
+                        Toast.makeText(getApplicationContext(), "Cannot delete until all assigned assessments are deleted.",
+                                Toast.LENGTH_LONG).show();
+                    }
+                    else{//term has not been saved and has no cached courses. can just finish.
+                    finish();
+                    }
+                }
+
             }
             return super.onOptionsItemSelected(item);
         }
