@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".UI.CourseDetail">
+
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <Button
+                    android:id="@+id/saveAssessment"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="SAVE"
+                    android:textSize="12sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.498"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/radio_group" />
+
+                <TextView
+                    android:id="@+id/labelCourseStart"
+                    android:layout_width="40dp"
+                    android:layout_height="45dp"
+                    android:gravity="center"
+                    android:text="Start Date"
+                    android:textColor="@color/black"
+                    android:textSize="12sp"
+                    app:layout_constraintStart_toStartOf="@+id/labelCourseTitle"
+                    app:layout_constraintTop_toBottomOf="@+id/labelCourseTitle" />
+
+                <TextView
+                    android:id="@+id/labelCourseTitle"
+                    android:layout_width="40dp"
+                    android:layout_height="45dp"
+                    android:layout_marginStart="8dp"
+                    android:gravity="center"
+                    android:text="Title"
+                    android:textColor="@color/black"
+                    android:textSize="12sp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/labelCourseEnd"
+                    android:layout_width="40dp"
+                    android:layout_height="45dp"
+                    android:gravity="center"
+                    android:text="End Date"
+                    android:textColor="@color/black"
+                    android:textSize="12sp"
+                    app:layout_constraintStart_toStartOf="@+id/labelCourseStart"
+                    app:layout_constraintTop_toBottomOf="@+id/labelCourseStart" />
+
+                <TextView
+                    android:id="@+id/labelCourseStatus"
+                    android:layout_width="40dp"
+                    android:layout_height="45dp"
+                    android:gravity="center"
+                    android:text="Type"
+                    android:textColor="@color/black"
+                    android:textSize="12sp"
+                    app:layout_constraintStart_toStartOf="@+id/labelCourseEnd"
+                    app:layout_constraintTop_toBottomOf="@+id/labelCourseEnd" />
+
+                <EditText
+                    android:id="@+id/editTextAssessmentStart"
+                    android:layout_width="235dp"
+                    android:layout_height="50dp"
+                    android:ems="10"
+                    android:focusable="false"
+                    android:hint="Enter Assessment Start Date"
+                    android:inputType="none"
+                    android:textColorHint="@color/hintText"
+                    android:textSize="12sp"
+                    app:layout_constraintStart_toEndOf="@+id/labelCourseStart"
+                    app:layout_constraintTop_toTopOf="@+id/labelCourseStart" />
+
+                <EditText
+                    android:id="@+id/editTextAssessmentTitle"
+                    android:layout_width="235dp"
+                    android:layout_height="50dp"
+                    android:ems="10"
+                    android:hint="Enter Assessment Title"
+                    android:inputType="textPersonName"
+                    android:textColorHint="#D1D1D1"
+                    android:textSize="12sp"
+                    app:layout_constraintStart_toEndOf="@+id/labelCourseTitle"
+                    app:layout_constraintTop_toTopOf="@+id/labelCourseTitle" />
+
+                <EditText
+                    android:id="@+id/editTextAssessmentEnd"
+                    android:layout_width="235dp"
+                    android:layout_height="50dp"
+                    android:ems="10"
+                    android:focusable="false"
+                    android:hint="Enter Assessment End Date"
+                    android:inputType="none"
+                    android:textColorHint="@color/hintText"
+                    android:textSize="12sp"
+                    app:layout_constraintStart_toEndOf="@+id/labelCourseEnd"
+                    app:layout_constraintTop_toBottomOf="@+id/labelCourseStart" />
+
+                <RadioGroup
+                    android:id="@+id/radio_group"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintStart_toEndOf="@+id/labelCourseStatus"
+                    app:layout_constraintTop_toBottomOf="@+id/labelCourseEnd">
+
+                    <RadioButton
+                        android:id="@+id/radio_performance"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Performance" />
+
+                    <RadioButton
+                        android:id="@+id/radio_objective"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Objective" />
+
+                </RadioGroup>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </LinearLayout>
+    </ScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
