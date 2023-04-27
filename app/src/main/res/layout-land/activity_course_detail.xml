@@ -9,7 +9,7 @@
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
@@ -30,8 +30,8 @@
                     android:id="@+id/courseSaveButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="350dp"
-                    android:text="SAVE"
+                    android:layout_marginTop="300dp"
+                    android:text="SAVE Course"
                     android:textSize="12sp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -145,10 +145,10 @@
                     android:layout_height="57dp"
                     android:layout_margin="0dp"
                     android:background="@drawable/my_border_drawable"
+                    android:entries="@array/type_options"
                     android:spinnerMode="dropdown"
                     app:layout_constraintStart_toEndOf="@+id/labelCourseStatus"
-                    app:layout_constraintTop_toBottomOf="@+id/labelCourseEnd"
-                    android:entries="@array/type_options"/>
+                    app:layout_constraintTop_toBottomOf="@+id/labelCourseEnd" />
 
                 <TextView
                     android:id="@+id/labelCourseTitle"
