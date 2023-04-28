@@ -1,13 +1,19 @@
 package com.humphrey.c196.UI;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.PopupMenu;
+import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.humphrey.c196.Database.Repository;
 import com.humphrey.c196.Entity.Course;
@@ -16,15 +22,20 @@ import com.humphrey.c196.R;
 import java.util.List;
 
 public class CourseScreen extends AppCompatActivity {
-    int termID;
     private Repository repository;
+    private ImageView hamburger;
+    private TextView toolbarText;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_course_screen);
-        termID = getIntent().getIntExtra("termID", 0);
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        hamburger = toolbar.findViewById(R.id.menuIcon);
+        toolbarText = toolbar.findViewById(R.id.toolbarText);
+        toolbarText.setText("All Courses");
         RecyclerView recyclerView = findViewById(R.id.courseRecyclerView);
-        final CourseAdapter courseAdapter = new CourseAdapter(this,termID);
+        final CourseAdapter courseAdapter = new CourseAdapter(this,0);
         recyclerView.setAdapter(courseAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         repository = new Repository(getApplication());
@@ -32,12 +43,47 @@ public class CourseScreen extends AppCompatActivity {
         List<Course> allCourses = repository.getAllCourses();
         courseAdapter.setCourseList(allCourses);
 
-
+        hamburger.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showPopupMenu(view);
+            }
+        });
 
     }
-    public void goToCourseDetailScreen(View view) {
-        Intent intent = new Intent(CourseScreen.this, CourseDetail.class);
-        intent.putExtra("termID", termID);
+    private void showPopupMenu(View view) {
+        // Inflate the menu using the PopupMenu class
+        PopupMenu popupMenu = new PopupMenu(this, view);
+        popupMenu.inflate(R.menu.menu_coursescreen);
+
+        // Set a click listener on the menu items
+        popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem menuItem) {
+                switch (menuItem.getItemId()) {
+                    case R.id.menuAllTerms:
+                        Intent intent = new Intent(CourseScreen.this, TermScreen.class);
+                        startActivity(intent);
+                        return true;
+                    case R.id.menuAllAssessments:
+                        goToAssessmentScreen(view);
+                        return true;
+                    default:
+                        return false;
+                }
+            }
+        });
+        // Show the menu
+        popupMenu.show();
+    }
+    public void goToAssessmentScreen(View view){
+        Intent intent = new Intent(CourseScreen.this, AssessmentScreen.class);
+        startActivity(intent);
+    }
+    public void goToTermScreen(View view) {
+        Intent intent = new Intent(CourseScreen.this, TermScreen.class);
+        Toast.makeText(getApplicationContext(), "Select Term to Add Courses. Tap + if none available.",
+                Toast.LENGTH_LONG).show();
         startActivity(intent);
     }
 }

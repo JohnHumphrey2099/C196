@@ -339,31 +339,3 @@ public class CourseDetail extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 }
-
-//    public boolean onCreateOptionsMenu(Menu menu){
-//        getMenuInflater().inflate(R.menu.menu_termdetails, menu);
-//        return true;
-//    }
-//    public boolean onOptionsItemSelected(MenuItem item){
-//        switch (item.getItemId()){
-//            case android.R.id.home:
-//                this.finish();
-//                return true;
-//            case R.id.share:
-//                Intent sendIntent = new Intent();
-//                sendIntent.setAction(Intent.ACTION_SEND);
-//                sendIntent.putExtra(Intent.EXTRA_TEXT, editNote.getText().toString());
-//                sendIntent.putExtra(Intent.EXTRA_TITLE, "Message Title");
-//                sendIntent.setType("text/plain");
-//                Intent shareIntent = Intent.createChooser(sendIntent,null);
-//                startActivity(shareIntent);
-//                return true;
-//            case R.id.notifyStart:
-//                String dateFromScreen = editStartDate.getText().toString();
-//                String myFormat = "MM/dd/yy";
-//                SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
-//                Date myDate = null;
-//
-//        }
-//    }
-//}

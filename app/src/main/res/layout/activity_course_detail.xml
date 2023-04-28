@@ -5,17 +5,21 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".UI.CourseDetail">
-
+    <include
+        android:id="@+id/toolbar"
+        layout="@layout/toolbar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0">
+        app:layout_constraintTop_toBottomOf="@+id/toolbar">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -30,13 +34,11 @@
                     android:id="@+id/courseSaveButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="648dp"
-                    android:text="SAVE"
+                    android:text="SAVE COURSE"
                     android:textSize="12sp"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.498"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintStart_toEndOf="@+id/labelAssessmentsCourseDetail"
+                    app:layout_constraintTop_toBottomOf="@+id/addAssessment" />
 
                 <TextView
                     android:id="@+id/labelCourseStart"
@@ -146,10 +148,10 @@
                     android:layout_height="57dp"
                     android:layout_margin="0dp"
                     android:background="@drawable/my_border_drawable"
+                    android:entries="@array/type_options"
                     android:spinnerMode="dropdown"
                     app:layout_constraintStart_toEndOf="@+id/labelCourseStatus"
-                    app:layout_constraintTop_toBottomOf="@+id/labelCourseEnd"
-                    android:entries="@array/type_options"/>
+                    app:layout_constraintTop_toBottomOf="@+id/labelCourseEnd" />
 
                 <TextView
                     android:id="@+id/labelCourseTitle"

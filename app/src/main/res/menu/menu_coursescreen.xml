@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/menuAllTerms"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:title="View All Terms" />
+    <item
+        android:id="@+id/menuAllAssessments"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:title="View All Assessments" />
+</menu>
