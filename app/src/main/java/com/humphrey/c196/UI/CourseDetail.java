@@ -2,6 +2,8 @@ package com.humphrey.c196.UI;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.PopupMenu;
+import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -16,7 +18,9 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.humphrey.c196.Database.Repository;
@@ -56,19 +60,25 @@ public class CourseDetail extends AppCompatActivity {
     AssessmentAdapter assessmentAdapter;
     String myFormat = "MM/dd/yy";
     SimpleDateFormat sdf = new SimpleDateFormat(myFormat,Locale.US);
+    private ImageView hamburger;
+    private TextView toolbarText;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        ActionBar actionBar = getSupportActionBar();
-        //set title of action bar
-        if(getIntent().getStringExtra("title") == null){
-            actionBar.setTitle("New Course");
-        }
-        else{
-            actionBar.setTitle(getIntent().getStringExtra("title"));
-        }
         setContentView(R.layout.activity_course_detail);
         repository = new Repository(getApplication());
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        hamburger = toolbar.findViewById(R.id.menuIcon);
+        toolbarText = toolbar.findViewById(R.id.toolbarText);
+        //set title of action bar
+        if(getIntent().getStringExtra("title") == null){
+            toolbarText.setText("New Course");
+        }
+        else{
+            toolbarText.setText(getIntent().getStringExtra("title"));
+        }
+
 // Assign fields
         Button saveButton = findViewById(R.id.courseSaveButton);
         Button addAssessment = findViewById(R.id.addAssessment);
@@ -149,6 +159,12 @@ public class CourseDetail extends AppCompatActivity {
         assessmentAdapter.setAssessmentList(Util.cacheAssessments);
 
         //set up buttons
+        hamburger.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showPopupMenu(view);
+            }
+        });
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -291,51 +307,72 @@ public class CourseDetail extends AppCompatActivity {
         //if course isn't saved, assessment was added to cached assessments. adapter already pointed to cached assessments
         assessmentAdapter.notifyDataSetChanged();
     }
-    public boolean onCreateOptionsMenu(Menu menu){
-        getMenuInflater().inflate(R.menu.menu_coursedetails, menu);
-        return true;
+    private void showPopupMenu(View view) {
+        // Inflate the menu using the PopupMenu class
+        PopupMenu popupMenu = new PopupMenu(this, view);
+        popupMenu.inflate(R.menu.menu_coursedetails);
+
+        // Set a click listener on the menu items
+        popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem menuItem) {
+                switch (menuItem.getItemId()) {
+                    case R.id.courseStartAlert:
+
+                        return true;
+                    case R.id.courseEndAlert:
+
+                        return true;
+                    case R.id.shareNote:
+
+                        return true;
+                    case R.id.removeCourse:
+                        if (id == 0) { // unsaved course
+                            if (Util.cacheAssessments.size() == 0) {
+                                if (position != 9999) {
+                                    Util.cacheCourses.remove(position);
+                                }
+                                Util.cacheAssessments.clear();
+                                finish();
+                            }
+                            else{
+                                Toast.makeText(getApplicationContext(), "Cannot delete until all assigned assessments are deleted.",
+                                        Toast.LENGTH_LONG).show();
+                            }
+                        }
+
+                        else {//course is in db
+                            ArrayList<Assessment> temp = new ArrayList<>();
+                            for (Assessment a : repository.getAllAssessments()) {
+                                if (a.getCourseID() == id) {
+                                    temp.add(a);
+                                }
+                            }
+                            if (temp.size() != 0 || Util.cacheAssessments.size() != 0) {//there are associated assessments
+                                Toast.makeText(getApplicationContext(), "Cannot delete until all assigned assessments are deleted.",
+                                        Toast.LENGTH_LONG).show();
+                            } else {//there are not any associated assessments
+                                repository.deleteCourse(new Course(id, null, null,
+                                        null,null, null,
+                                        null, null, null, 0));
+                                finish();
+                            }
+                        }
+                        return true;
+                    default:
+                        return false;
+                }
+            }
+        });
+        // Show the menu
+        popupMenu.show();
     }
+
     private void updateDateLabel(EditText editText, Calendar calendar){
         String myFormat = "MM/dd/yy";
         SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
         editText.setText(sdf.format(calendar.getTime()));
     }
 
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.removeCourse:
-                if (id == 0) { // unsaved course
-                    if (Util.cacheAssessments.size() == 0) {
-                        if (position != 9999) {
-                            Util.cacheCourses.remove(position);
-                        }
-                        Util.cacheAssessments.clear();
-                        finish();
-                    }
-                    else{
-                        Toast.makeText(getApplicationContext(), "Cannot delete until all assigned assessments are deleted.",
-                                Toast.LENGTH_LONG).show();
-                    }
-                }
 
-                else {//course is in db
-                    ArrayList<Assessment> temp = new ArrayList<>();
-                    for (Assessment a : repository.getAllAssessments()) {
-                        if (a.getCourseID() == id) {
-                            temp.add(a);
-                        }
-                    }
-                    if (temp.size() != 0 || Util.cacheAssessments.size() != 0) {//there are associated assessments
-                        Toast.makeText(getApplicationContext(), "Cannot delete until all assigned assessments are deleted.",
-                                Toast.LENGTH_LONG).show();
-                    } else {//there are not any associated assessments
-                        repository.deleteCourse(new Course(id, null, null,
-                                null,null, null,
-                                null, null, null, 0));
-                        finish();
-                    }
-                }
-        }
-        return super.onOptionsItemSelected(item);
-    }
 }

@@ -5,6 +5,7 @@ import androidx.appcompat.widget.PopupMenu;
 import androidx.appcompat.widget.Toolbar;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
@@ -26,6 +27,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Repository r = new Repository(getApplication());
         Toolbar toolbar = findViewById(R.id.toolbar);
+        Log.d("DEBUG", "TextView reference: " + toolbar);
         setSupportActionBar(toolbar);
         hamburger = toolbar.findViewById(R.id.menuIcon);
         toolbarText = toolbar.findViewById(R.id.toolbarText);

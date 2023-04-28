@@ -220,7 +220,7 @@ public class TermDetail extends AppCompatActivity {
                             }
                             //term saved but has assigned courses
                             else{
-                                Toast.makeText(getApplicationContext(), "Cannot delete until all courses assessments are deleted.",
+                                Toast.makeText(getApplicationContext(), "Cannot delete until all assigned courses are deleted.",
                                         Toast.LENGTH_LONG).show();
                             }
                         }
@@ -228,7 +228,7 @@ public class TermDetail extends AppCompatActivity {
                         else{
                             //term has not been saved but has cached courses
                             if(Util.cacheCourses.size() != 0){
-                                Toast.makeText(getApplicationContext(), "Cannot delete until all assigned assessments are deleted.",
+                                Toast.makeText(getApplicationContext(), "Cannot delete until all assigned courses are deleted.",
                                         Toast.LENGTH_LONG).show();
                             }
                             else{//term has not been saved and has no cached courses. can just finish.

@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
@@ -33,11 +34,18 @@ public class TermScreen extends AppCompatActivity {
         hamburger = toolbar.findViewById(R.id.menuIcon);
         toolbarText = toolbar.findViewById(R.id.toolbarText);
         toolbarText.setText("All Terms");
+        //recycler
         RecyclerView recyclerView = findViewById(R.id.termsRecyclerView);
         final TermAdapter termAdapter = new TermAdapter(this);
         recyclerView.setAdapter(termAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         repository = new Repository(getApplication());
+        hamburger.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showPopupMenu(view);
+            }
+        });
         List<Term> allTerms = repository.getALlTerms();
         if (allTerms.size() != 0){
             TextView label = findViewById(R.id.termsScreenEmptyLabel);
@@ -48,17 +56,12 @@ public class TermScreen extends AppCompatActivity {
             TextView label = findViewById(R.id.termsScreenEmptyLabel);
             label.setVisibility(View.VISIBLE);
         }
-        hamburger.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                showPopupMenu(view);
-            }
-        });
+
     }
     private void showPopupMenu(View view) {
         // Inflate the menu using the PopupMenu class
         PopupMenu popupMenu = new PopupMenu(this, view);
-        popupMenu.inflate(R.menu.menu_main);
+        popupMenu.inflate(R.menu.menu_termscreen);
 
         // Set a click listener on the menu items
         popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
@@ -96,7 +99,7 @@ public class TermScreen extends AppCompatActivity {
     @Override
     protected void onResume(){
         super.onResume();
-        setContentView(R.layout.activity_term_screen);
+
         RecyclerView recyclerView = findViewById(R.id.termsRecyclerView);
         final TermAdapter termAdapter = new TermAdapter(this);
         recyclerView.setAdapter(termAdapter);
@@ -113,4 +116,5 @@ public class TermScreen extends AppCompatActivity {
             label.setVisibility(View.VISIBLE);
         }
     }
+
 }
