@@ -25,6 +25,7 @@ public class CourseAdapter extends RecyclerView.Adapter<CourseAdapter.CourseView
     private int termID;
     private final Context context;
     private final LayoutInflater inflater;
+    private final String termName = "";
 
     //constructor
     public CourseAdapter(Context context, int termID) {
@@ -36,9 +37,11 @@ public class CourseAdapter extends RecyclerView.Adapter<CourseAdapter.CourseView
     //inner class
     class CourseViewHolder extends RecyclerView.ViewHolder{
         private TextView courseViewTitle;
+        private final TextView termNameView;
         private CourseViewHolder(@NonNull View itemView) {
             super(itemView);
             courseViewTitle = itemView.findViewById(R.id.courseRowTextView);
+            termNameView = itemView.findViewById(R.id.courseRowTermName);
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -81,6 +84,8 @@ public class CourseAdapter extends RecyclerView.Adapter<CourseAdapter.CourseView
     @Override
     public void onBindViewHolder(@NonNull CourseViewHolder holder, int position) {
             holder.courseViewTitle.setText(courseList.get(position).getTitle());
+            //TODO figure out how to get the termName of the course and set it to this holder.
+            holder.termNameView.setText(termName);
     }
 
     @Override

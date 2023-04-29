@@ -12,6 +12,16 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <TextView
+        android:id="@+id/noCoursesLabel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="No Courses. Tap + to Choose Term to Add Courses to"
+        android:textColor="@color/hintText"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar"></TextView>
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/courseRecyclerView"
         android:layout_width="0dp"

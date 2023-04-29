@@ -42,7 +42,15 @@ public class CourseScreen extends AppCompatActivity {
         repository = new Repository(getApplication());
 
         List<Course> allCourses = repository.getAllCourses();
-        courseAdapter.setCourseList(allCourses);
+        if(allCourses.size() != 0) {
+            TextView label = findViewById(R.id.noCoursesLabel);
+            courseAdapter.setCourseList(allCourses);
+            label.setVisibility(View.GONE);
+        }
+        else{
+            TextView label = findViewById(R.id.noCoursesLabel);
+            label.setVisibility(View.VISIBLE);
+        }
 
         hamburger.setOnClickListener(new View.OnClickListener() {
             @Override
