@@ -25,9 +25,12 @@ public class TermScreen extends AppCompatActivity {
     private Repository repository;
     private ImageView hamburger;
     private TextView toolbarText;
+    private TermAdapter termAdapter;
+    List<Term> allTerms;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        repository = new Repository(getApplication());
         setContentView(R.layout.activity_term_screen);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -36,26 +39,19 @@ public class TermScreen extends AppCompatActivity {
         toolbarText.setText("All Terms");
         //recycler
         RecyclerView recyclerView = findViewById(R.id.termsRecyclerView);
-        final TermAdapter termAdapter = new TermAdapter(this);
+        termAdapter = new TermAdapter(this);
         recyclerView.setAdapter(termAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        repository = new Repository(getApplication());
+        allTerms = repository.getALlTerms();
+        termAdapter.setTermList(allTerms);
+
+        //set buttons
         hamburger.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 showPopupMenu(view);
             }
         });
-        List<Term> allTerms = repository.getALlTerms();
-        if (allTerms.size() != 0){
-            TextView label = findViewById(R.id.termsScreenEmptyLabel);
-            termAdapter.setTermList(allTerms);
-            label.setVisibility(View.GONE);
-        }
-        else{
-            TextView label = findViewById(R.id.termsScreenEmptyLabel);
-            label.setVisibility(View.VISIBLE);
-        }
 
     }
     private void showPopupMenu(View view) {
@@ -99,16 +95,9 @@ public class TermScreen extends AppCompatActivity {
     @Override
     protected void onResume(){
         super.onResume();
-
-        RecyclerView recyclerView = findViewById(R.id.termsRecyclerView);
-        final TermAdapter termAdapter = new TermAdapter(this);
-        recyclerView.setAdapter(termAdapter);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        repository = new Repository(getApplication());
-        List<Term> allTerms = repository.getALlTerms();
+        termAdapter.notifyDataSetChanged();
         if (allTerms.size() != 0){
             TextView label = findViewById(R.id.termsScreenEmptyLabel);
-            termAdapter.setTermList(allTerms);
             label.setVisibility(View.GONE);
         }
         else{

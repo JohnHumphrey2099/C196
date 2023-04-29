@@ -26,6 +26,9 @@ public class CourseScreen extends AppCompatActivity {
     private Repository repository;
     private ImageView hamburger;
     private TextView toolbarText;
+    private CourseAdapter courseAdapter;
+    private List<Course> allCourses;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,23 +38,15 @@ public class CourseScreen extends AppCompatActivity {
         hamburger = toolbar.findViewById(R.id.menuIcon);
         toolbarText = toolbar.findViewById(R.id.toolbarText);
         toolbarText.setText("All Courses");
+        //recycler
         RecyclerView recyclerView = findViewById(R.id.courseRecyclerView);
-        final CourseAdapter courseAdapter = new CourseAdapter(this,0);
+        courseAdapter = new CourseAdapter(this, 0);
         recyclerView.setAdapter(courseAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         repository = new Repository(getApplication());
-
-        List<Course> allCourses = repository.getAllCourses();
-        if(allCourses.size() != 0) {
-            TextView label = findViewById(R.id.noCoursesLabel);
-            courseAdapter.setCourseList(allCourses);
-            label.setVisibility(View.GONE);
-        }
-        else{
-            TextView label = findViewById(R.id.noCoursesLabel);
-            label.setVisibility(View.VISIBLE);
-        }
-
+        allCourses = repository.getAllCourses();
+        courseAdapter.setCourseList(allCourses);
+        //set buttons
         hamburger.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -60,6 +55,7 @@ public class CourseScreen extends AppCompatActivity {
         });
 
     }
+
     private void showPopupMenu(View view) {
         // Inflate the menu using the PopupMenu class
         PopupMenu popupMenu = new PopupMenu(this, view);
@@ -85,14 +81,29 @@ public class CourseScreen extends AppCompatActivity {
         // Show the menu
         popupMenu.show();
     }
-    public void goToAssessmentScreen(View view){
+
+    public void goToAssessmentScreen(View view) {
         Intent intent = new Intent(CourseScreen.this, AssessmentScreen.class);
         startActivity(intent);
     }
+
     public void goToTermScreen(View view) {
         Intent intent = new Intent(CourseScreen.this, TermScreen.class);
         Toast.makeText(getApplicationContext(), "Select Term to Add Courses. Tap + if none available.",
                 Toast.LENGTH_LONG).show();
         startActivity(intent);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        courseAdapter.notifyDataSetChanged();
+        if (allCourses.size() != 0) {
+            TextView label = findViewById(R.id.noCoursesLabel);
+            label.setVisibility(View.GONE);
+        } else {
+            TextView label = findViewById(R.id.noCoursesLabel);
+            label.setVisibility(View.VISIBLE);
+        }
     }
 }
