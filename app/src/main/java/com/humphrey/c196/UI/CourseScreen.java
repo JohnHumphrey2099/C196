@@ -18,6 +18,7 @@ import android.widget.Toast;
 
 import com.humphrey.c196.Database.Repository;
 import com.humphrey.c196.Entity.Course;
+import com.humphrey.c196.Entity.Term;
 import com.humphrey.c196.R;
 
 import java.util.List;
@@ -28,6 +29,7 @@ public class CourseScreen extends AppCompatActivity {
     private TextView toolbarText;
     private CourseAdapter courseAdapter;
     private List<Course> allCourses;
+    private List<Term> allTerms;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,7 +47,11 @@ public class CourseScreen extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         repository = new Repository(getApplication());
         allCourses = repository.getAllCourses();
+        allTerms = repository.getALlTerms();
         courseAdapter.setCourseList(allCourses);
+        courseAdapter.setTermList(allTerms);
+
+
         //set buttons
         hamburger.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -97,6 +103,8 @@ public class CourseScreen extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        allCourses = repository.getAllCourses();
+        courseAdapter.setCourseList(allCourses);
         courseAdapter.notifyDataSetChanged();
         if (allCourses.size() != 0) {
             TextView label = findViewById(R.id.noCoursesLabel);

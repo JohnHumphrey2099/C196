@@ -47,6 +47,7 @@ public class TermDetail extends AppCompatActivity {
     int id;
     Repository repository;
     CourseAdapter courseAdapter;
+    List<Term> dummyList = new ArrayList<>();
     private ImageView hamburger;
     private TextView toolbarText;
     @Override
@@ -65,9 +66,7 @@ public class TermDetail extends AppCompatActivity {
             toolbarText.setText(getIntent().getStringExtra("title"));
         }
         id = getIntent().getIntExtra("id",0);
-        repository = new Repository(getApplication());
         Button saveButton = findViewById(R.id.termDetailSaveButton);
-
         Button addCourseButton = findViewById(R.id.termDetailAddCourseToTermButton);
         String myFormat = "MM/dd/yy";
         SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
@@ -75,8 +74,9 @@ public class TermDetail extends AppCompatActivity {
         editStartDate = findViewById(R.id.editTextTermStart);
         editEndDate = findViewById(R.id.editTextTermEnd);
         Util.cacheCourses.clear();
+        //recycler
+        repository = new Repository(getApplication());
         RecyclerView recyclerView = findViewById(R.id.coursesInsideTermDetails);
-
         courseAdapter = new CourseAdapter(this, id);
         recyclerView.setAdapter(courseAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -86,7 +86,10 @@ public class TermDetail extends AppCompatActivity {
                 if (c.getTermID() == id) Util.cacheCourses.add(c);
             }
         }
+        //get all terms
+        dummyList = repository.getALlTerms();
         courseAdapter.setCourseList(Util.cacheCourses);
+        courseAdapter.setTermList(dummyList);
         //set the EditText Views
         if (id == 0){
             editStartDate.setText(sdf.format(new Date()));

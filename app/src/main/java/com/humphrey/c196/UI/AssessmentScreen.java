@@ -16,6 +16,7 @@ import android.widget.Toast;
 
 import com.humphrey.c196.Database.Repository;
 import com.humphrey.c196.Entity.Assessment;
+import com.humphrey.c196.Entity.Course;
 import com.humphrey.c196.R;
 
 import java.util.List;
@@ -24,6 +25,9 @@ public class AssessmentScreen extends AppCompatActivity {
     private ImageView hamburger;
     private TextView toolbarText;
     private Repository repository;
+    private AssessmentAdapter assessmentAdapter;
+    private List<Course> allCourses;
+    private List<Assessment> allAssessments;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,13 +38,15 @@ public class AssessmentScreen extends AppCompatActivity {
         toolbarText = toolbar.findViewById(R.id.toolbarText);
         toolbarText.setText("All Assessments");
         RecyclerView recyclerView = findViewById(R.id.assessmentRecyclerView);
-        final AssessmentAdapter assessmentAdapter = new AssessmentAdapter(this,0);
+        assessmentAdapter= new AssessmentAdapter(this,0);
         recyclerView.setAdapter(assessmentAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         repository = new Repository(getApplication());
 
-        List<Assessment> allAssessments = repository.getAllAssessments();
+        allAssessments = repository.getAllAssessments();
+        allCourses = repository.getAllCourses();
         assessmentAdapter.setAssessmentList(allAssessments);
+        assessmentAdapter.setAllCourses(allCourses);
         hamburger.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -49,9 +55,9 @@ public class AssessmentScreen extends AppCompatActivity {
         });
     }
 
-    public void goToTermScreen(View view) {
-        Intent intent = new Intent(AssessmentScreen.this, TermScreen.class);
-        Toast.makeText(getApplicationContext(), "Select Term and Course to add Assessment to. Tap + if none available.",
+    public void goToCourseScreen(View view) {
+        Intent intent = new Intent(AssessmentScreen.this, CourseScreen.class);
+        Toast.makeText(getApplicationContext(), "Select Course to add Assessment to. Tap + if none available.",
                 Toast.LENGTH_LONG).show();
         startActivity(intent);
     }
@@ -82,5 +88,20 @@ public class AssessmentScreen extends AppCompatActivity {
         });
         // Show the menu
         popupMenu.show();
+    }
+    @Override
+    protected void onResume(){
+        super.onResume();
+        allAssessments = repository.getAllAssessments();
+        assessmentAdapter.setAssessmentList(allAssessments);
+        assessmentAdapter.notifyDataSetChanged();
+        if (allAssessments.size() != 0){
+            TextView label = findViewById(R.id.noAssessmentLabel);
+            label.setVisibility(View.GONE);
+        }
+        else{
+            TextView label = findViewById(R.id.noAssessmentLabel);
+            label.setVisibility(View.VISIBLE);
+        }
     }
 }

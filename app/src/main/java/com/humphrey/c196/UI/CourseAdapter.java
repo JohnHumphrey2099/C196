@@ -10,7 +10,9 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.humphrey.c196.Database.Repository;
 import com.humphrey.c196.Entity.Course;
+import com.humphrey.c196.Entity.Term;
 import com.humphrey.c196.R;
 
 import java.util.List;
@@ -20,12 +22,14 @@ public class CourseAdapter extends RecyclerView.Adapter<CourseAdapter.CourseView
         this.courseList = courseList;
         notifyDataSetChanged();
     }
-
+    public void setTermList(List<Term> termList){
+        this.allTerms = termList;
+    }
     private List<Course> courseList;
     private int termID;
     private final Context context;
     private final LayoutInflater inflater;
-    private final String termName = "";
+    private List<Term> allTerms;
 
     //constructor
     public CourseAdapter(Context context, int termID) {
@@ -37,7 +41,7 @@ public class CourseAdapter extends RecyclerView.Adapter<CourseAdapter.CourseView
     //inner class
     class CourseViewHolder extends RecyclerView.ViewHolder{
         private TextView courseViewTitle;
-        private final TextView termNameView;
+        private TextView termNameView;
         private CourseViewHolder(@NonNull View itemView) {
             super(itemView);
             courseViewTitle = itemView.findViewById(R.id.courseRowTextView);
@@ -83,11 +87,20 @@ public class CourseAdapter extends RecyclerView.Adapter<CourseAdapter.CourseView
 
     @Override
     public void onBindViewHolder(@NonNull CourseViewHolder holder, int position) {
-            holder.courseViewTitle.setText(courseList.get(position).getTitle());
-            //TODO figure out how to get the termName of the course and set it to this holder.
-            holder.termNameView.setText(termName);
+        holder.courseViewTitle.setText(courseList.get(position).getTitle());
+        boolean showTerm = false;
+            for (Term t : allTerms) {
+                if (t.getTermID() == courseList.get(position).getTermID()) {
+                    holder.termNameView.setText(t.getTitle());
+                    holder.termNameView.setVisibility(View.VISIBLE);
+                    showTerm = true;
+                    break;
+                }
+            }
+        if (!showTerm) {
+            holder.termNameView.setVisibility(View.GONE);
+        }
     }
-
     @Override
     public int getItemCount() {
 

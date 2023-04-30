@@ -2,6 +2,8 @@ package com.humphrey.c196.UI;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.PopupMenu;
+import androidx.appcompat.widget.Toolbar;
 
 import android.app.DatePickerDialog;
 import android.os.Bundle;
@@ -11,16 +13,22 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.humphrey.c196.Database.Repository;
 import com.humphrey.c196.Entity.Assessment;
+import com.humphrey.c196.Entity.Course;
+import com.humphrey.c196.Entity.Term;
 import com.humphrey.c196.R;
 import com.humphrey.c196.Utility.Util;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
@@ -43,18 +51,25 @@ public class AssessmentDetail extends AppCompatActivity {
     RadioButton objectiveButton;
     String type;
     Repository repository;
+    private ImageView hamburger;
+    private TextView toolbarText;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_assessment_detail);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         ActionBar actionBar = getSupportActionBar();
+        setSupportActionBar(toolbar);
+        hamburger = toolbar.findViewById(R.id.menuIcon);
+        toolbarText = toolbar.findViewById(R.id.toolbarText);
         //set title of action bar
         if(getIntent().getStringExtra("title") == null){
-            actionBar.setTitle("New Assessment");
+            toolbarText.setText("New Assessment");
         }
         else{
-            actionBar.setTitle(getIntent().getStringExtra("title"));
+            toolbarText.setText(getIntent().getStringExtra("title"));
         }
-        setContentView(R.layout.activity_assessment_detail);
+
         repository = new Repository(getApplication());
         id = getIntent().getIntExtra("id", 0);
         courseID = getIntent().getIntExtra("courseID", 0);
@@ -104,6 +119,14 @@ public class AssessmentDetail extends AppCompatActivity {
             startDate.setText(getIntent().getStringExtra("start"));
             endDate.setText(getIntent().getStringExtra("end"));
         }
+
+        //set buttons
+        hamburger.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showPopupMenu(view);
+            }
+        });
         startDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -202,24 +225,33 @@ public class AssessmentDetail extends AppCompatActivity {
         SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
         editText.setText(sdf.format(calendar.getTime()));
     }
-    public boolean onCreateOptionsMenu(Menu menu){
-        getMenuInflater().inflate(R.menu.menu_assessmentdetails, menu);
-        return true;
-    }
-    public boolean onOptionsItemSelected(MenuItem item){
-        switch (item.getItemId()){
-            case R.id.removeAssessment:
-                if(id !=0){
-                    repository.deleteAssessment(new Assessment(id, null, null, null, null, courseID));
-                    finish();
+    private void showPopupMenu(View view) {
+        // Inflate the menu using the PopupMenu class
+        PopupMenu popupMenu = new PopupMenu(this, view);
+        popupMenu.inflate(R.menu.menu_assessmentdetails);
+
+        // Set a click listener on the menu items
+        popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem menuItem) {
+                switch (menuItem.getItemId()) {
+                    case R.id.removeAssessment:
+                        if(id !=0){
+                            repository.deleteAssessment(new Assessment(id, null, null, null, null, courseID));
+                            finish();
+                        }
+                        else{
+                            if(position == 0){
+                                Util.cacheAssessments.remove(position);
+                            }
+                            finish();
+                        }
+                    default:
+                        return false;
                 }
-                else{
-                    if(position == 0){
-                        Util.cacheAssessments.remove(position);
-                    }
-                    finish();
-                }
-        }
-        return super.onOptionsItemSelected(item);
+            }
+        });
+        // Show the menu
+        popupMenu.show();
     }
 }

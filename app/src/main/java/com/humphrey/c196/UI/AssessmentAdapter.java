@@ -11,20 +11,20 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.humphrey.c196.Entity.Assessment;
+import com.humphrey.c196.Entity.Course;
+import com.humphrey.c196.Entity.Term;
 import com.humphrey.c196.R;
 
 import java.util.List;
 public class AssessmentAdapter extends RecyclerView.Adapter<AssessmentAdapter.AssessmentViewHolder>{
-        public void setAssessmentList(List<Assessment> assessmentList) {
-            this.assessmentList = assessmentList;
-            notifyDataSetChanged();
-        }
+
 
         private List<Assessment> assessmentList;
         private final Context context;
 
         private final LayoutInflater inflater;
         private int courseID;
+        private List<Course> allCourses;
 
         //constructor
         public AssessmentAdapter(Context context, int courseID) {
@@ -36,9 +36,11 @@ public class AssessmentAdapter extends RecyclerView.Adapter<AssessmentAdapter.As
         //inner class
         class AssessmentViewHolder extends RecyclerView.ViewHolder{
             private TextView assessmentViewTitle;
+            private TextView assessCourseName;
             private AssessmentViewHolder(@NonNull View itemView) {
                 super(itemView);
                 assessmentViewTitle = itemView.findViewById(R.id.assessmentRowTextView);
+                assessCourseName = itemView.findViewById(R.id.assessRowCourseName);
                 itemView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -67,6 +69,18 @@ public class AssessmentAdapter extends RecyclerView.Adapter<AssessmentAdapter.As
         @Override
         public void onBindViewHolder(@NonNull AssessmentViewHolder holder, int position) {
             holder.assessmentViewTitle.setText(assessmentList.get(position).getTitle());
+            boolean showCourse = false;
+            for (Course c : allCourses) {
+                if (c.getCourseID() == assessmentList.get(position).getCourseID()) {
+                    holder.assessCourseName.setText(c.getTitle());
+                    holder.assessCourseName.setVisibility(View.VISIBLE);
+                    showCourse = true;
+                    break;
+                }
+            }
+            if (!showCourse) {
+                holder.assessCourseName.setVisibility(View.GONE);
+            }
         }
 
         @Override
@@ -78,5 +92,12 @@ public class AssessmentAdapter extends RecyclerView.Adapter<AssessmentAdapter.As
                 return 0;
             }
         }
+    public void setAssessmentList(List<Assessment> assessmentList) {
+        this.assessmentList = assessmentList;
+        notifyDataSetChanged();
+    }
+    public void setAllCourses(List<Course> allCourses){
+            this.allCourses = allCourses;
+    }
 }
 

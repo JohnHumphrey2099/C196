@@ -36,6 +36,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
 public class CourseDetail extends AppCompatActivity {
@@ -62,6 +63,7 @@ public class CourseDetail extends AppCompatActivity {
     SimpleDateFormat sdf = new SimpleDateFormat(myFormat,Locale.US);
     private ImageView hamburger;
     private TextView toolbarText;
+    private List<Course> dummyList = new ArrayList<>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -157,6 +159,7 @@ public class CourseDetail extends AppCompatActivity {
         profEmailField.setText(getIntent().getStringExtra("email"));
         editNote.setText(getIntent().getStringExtra("note"));
         assessmentAdapter.setAssessmentList(Util.cacheAssessments);
+        assessmentAdapter.setAllCourses(dummyList);
 
         //set up buttons
         hamburger.setOnClickListener(new View.OnClickListener() {

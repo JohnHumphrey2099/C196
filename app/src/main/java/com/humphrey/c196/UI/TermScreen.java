@@ -95,6 +95,8 @@ public class TermScreen extends AppCompatActivity {
     @Override
     protected void onResume(){
         super.onResume();
+        allTerms = repository.getALlTerms();
+        termAdapter.setTermList(allTerms);
         termAdapter.notifyDataSetChanged();
         if (allTerms.size() != 0){
             TextView label = findViewById(R.id.termsScreenEmptyLabel);
