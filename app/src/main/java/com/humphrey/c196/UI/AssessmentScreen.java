@@ -23,6 +23,7 @@ import java.util.List;
 
 public class AssessmentScreen extends AppCompatActivity {
     private ImageView hamburger;
+    private ImageView home;
     private TextView toolbarText;
     private Repository repository;
     private AssessmentAdapter assessmentAdapter;
@@ -42,7 +43,7 @@ public class AssessmentScreen extends AppCompatActivity {
         recyclerView.setAdapter(assessmentAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         repository = new Repository(getApplication());
-
+        home = toolbar.findViewById(R.id.homeIcon);
         allAssessments = repository.getAllAssessments();
         allCourses = repository.getAllCourses();
         assessmentAdapter.setAssessmentList(allAssessments);
@@ -51,6 +52,12 @@ public class AssessmentScreen extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 showPopupMenu(view);
+            }
+        });
+        home.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                goHome(view);
             }
         });
     }
@@ -103,5 +110,9 @@ public class AssessmentScreen extends AppCompatActivity {
             TextView label = findViewById(R.id.noAssessmentLabel);
             label.setVisibility(View.VISIBLE);
         }
+    }
+    private void goHome(View view) {
+        Intent intent = new Intent(AssessmentScreen.this, MainActivity.class);
+        startActivity(intent);
     }
 }

@@ -26,6 +26,7 @@ import java.util.List;
 public class CourseScreen extends AppCompatActivity {
     private Repository repository;
     private ImageView hamburger;
+    private ImageView home;
     private TextView toolbarText;
     private CourseAdapter courseAdapter;
     private List<Course> allCourses;
@@ -38,6 +39,7 @@ public class CourseScreen extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         hamburger = toolbar.findViewById(R.id.menuIcon);
+        home = toolbar.findViewById(R.id.homeIcon);
         toolbarText = toolbar.findViewById(R.id.toolbarText);
         toolbarText.setText("All Courses");
         //recycler
@@ -57,6 +59,12 @@ public class CourseScreen extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 showPopupMenu(view);
+            }
+        });
+        home.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                goHome(view);
             }
         });
 
@@ -113,5 +121,9 @@ public class CourseScreen extends AppCompatActivity {
             TextView label = findViewById(R.id.noCoursesLabel);
             label.setVisibility(View.VISIBLE);
         }
+    }
+    private void goHome(View view) {
+        Intent intent = new Intent(CourseScreen.this, MainActivity.class);
+        startActivity(intent);
     }
 }

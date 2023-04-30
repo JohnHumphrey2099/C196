@@ -49,6 +49,7 @@ public class TermDetail extends AppCompatActivity {
     CourseAdapter courseAdapter;
     List<Term> dummyList = new ArrayList<>();
     private ImageView hamburger;
+    private ImageView home;
     private TextView toolbarText;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,6 +58,7 @@ public class TermDetail extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         hamburger = toolbar.findViewById(R.id.menuIcon);
+        home = toolbar.findViewById(R.id.homeIcon);
         toolbarText = toolbar.findViewById(R.id.toolbarText);
         //set title of action bar
         if(getIntent().getStringExtra("title") == null){
@@ -130,7 +132,12 @@ public class TermDetail extends AppCompatActivity {
                 goToTermScreen(v);
             }
         });
-
+        home.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                goHome(view);
+            }
+        });
         addCourseButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -268,6 +275,10 @@ public class TermDetail extends AppCompatActivity {
     public void goToCourseDetail(View view){
         Intent intent = new Intent(TermDetail.this, CourseDetail.class);
         intent.putExtra("termID", id);
+        startActivity(intent);
+    }
+    private void goHome(View view) {
+        Intent intent = new Intent(TermDetail.this, MainActivity.class);
         startActivity(intent);
     }
 

@@ -18,6 +18,7 @@ import com.humphrey.c196.Entity.Term;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
+    public static int numAlert = 0;
     private ImageView hamburger;
     private TextView toolbarText;
 
@@ -34,7 +35,7 @@ public class MainActivity extends AppCompatActivity {
         List<Term> deleteTerms;
         deleteTerms = r.getALlTerms();
         toolbarText.setText("Welcome");
-        for (Term t : deleteTerms){
+        /*for (Term t : deleteTerms){
             r.deleteTerm(t);
         }
         for (Course c : r.getAllCourses()){
@@ -43,6 +44,8 @@ public class MainActivity extends AppCompatActivity {
         for(Assessment a : r.getAllAssessments()){
             r.deleteAssessment(a);
         }
+
+         */
         hamburger.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

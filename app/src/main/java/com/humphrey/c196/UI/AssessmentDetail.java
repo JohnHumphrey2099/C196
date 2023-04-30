@@ -6,6 +6,7 @@ import androidx.appcompat.widget.PopupMenu;
 import androidx.appcompat.widget.Toolbar;
 
 import android.app.DatePickerDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -53,6 +54,7 @@ public class AssessmentDetail extends AppCompatActivity {
     Repository repository;
     private ImageView hamburger;
     private TextView toolbarText;
+    private ImageView home;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,6 +63,7 @@ public class AssessmentDetail extends AppCompatActivity {
         ActionBar actionBar = getSupportActionBar();
         setSupportActionBar(toolbar);
         hamburger = toolbar.findViewById(R.id.menuIcon);
+        home = toolbar.findViewById(R.id.homeIcon);
         toolbarText = toolbar.findViewById(R.id.toolbarText);
         //set title of action bar
         if(getIntent().getStringExtra("title") == null){
@@ -120,11 +123,17 @@ public class AssessmentDetail extends AppCompatActivity {
             endDate.setText(getIntent().getStringExtra("end"));
         }
 
-        //set buttons
+        //Create buttons
         hamburger.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 showPopupMenu(view);
+            }
+        });
+        home.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                goHome(view);
             }
         });
         startDate.setOnClickListener(new View.OnClickListener() {
@@ -220,6 +229,12 @@ public class AssessmentDetail extends AppCompatActivity {
             }
         });
     }
+
+    private void goHome(View view) {
+        Intent intent = new Intent(AssessmentDetail.this, MainActivity.class);
+        startActivity(intent);
+    }
+
     private void updateDateLabel(EditText editText, Calendar calendar){
         String myFormat = "MM/dd/yy";
         SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);

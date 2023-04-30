@@ -24,6 +24,7 @@ import java.util.List;
 public class TermScreen extends AppCompatActivity {
     private Repository repository;
     private ImageView hamburger;
+    private ImageView home;
     private TextView toolbarText;
     private TermAdapter termAdapter;
     List<Term> allTerms;
@@ -35,6 +36,7 @@ public class TermScreen extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         hamburger = toolbar.findViewById(R.id.menuIcon);
+        home = toolbar.findViewById(R.id.homeIcon);
         toolbarText = toolbar.findViewById(R.id.toolbarText);
         toolbarText.setText("All Terms");
         //recycler
@@ -46,6 +48,12 @@ public class TermScreen extends AppCompatActivity {
         termAdapter.setTermList(allTerms);
 
         //set buttons
+        home.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                goHome(view);
+            }
+        });
         hamburger.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -107,5 +115,8 @@ public class TermScreen extends AppCompatActivity {
             label.setVisibility(View.VISIBLE);
         }
     }
-
+    private void goHome(View view) {
+        Intent intent = new Intent(TermScreen.this, MainActivity.class);
+        startActivity(intent);
+    }
 }

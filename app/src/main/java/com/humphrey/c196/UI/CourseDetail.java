@@ -7,8 +7,11 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.AlarmManager;
 import android.app.DatePickerDialog;
+import android.app.PendingIntent;
 import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
@@ -62,6 +65,7 @@ public class CourseDetail extends AppCompatActivity {
     String myFormat = "MM/dd/yy";
     SimpleDateFormat sdf = new SimpleDateFormat(myFormat,Locale.US);
     private ImageView hamburger;
+    private ImageView home;
     private TextView toolbarText;
     private List<Course> dummyList = new ArrayList<>();
     @Override
@@ -72,6 +76,7 @@ public class CourseDetail extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         hamburger = toolbar.findViewById(R.id.menuIcon);
+        home = toolbar.findViewById(R.id.homeIcon);
         toolbarText = toolbar.findViewById(R.id.toolbarText);
         //set title of action bar
         if(getIntent().getStringExtra("title") == null){
@@ -166,6 +171,12 @@ public class CourseDetail extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 showPopupMenu(view);
+            }
+        });
+        home.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                goHome(view);
             }
         });
         saveButton.setOnClickListener(new View.OnClickListener() {
@@ -321,13 +332,38 @@ public class CourseDetail extends AppCompatActivity {
             public boolean onMenuItemClick(MenuItem menuItem) {
                 switch (menuItem.getItemId()) {
                     case R.id.courseStartAlert:
-
+                        String dateInput = editTextCourseStart.getText().toString();
+                        Date date = null;
+                        try{
+                            date = sdf.parse(dateInput);
+                        }catch (ParseException e){
+                            e.printStackTrace();
+                        }
+                        Long trigger = date.getTime();
+                        Intent intent = new Intent(CourseDetail.this, MyReceiver.class);
+                        intent.putExtra("key", "message I want to see");//TODO this needs to be a specific course code? Watching webinars now
+                        PendingIntent sender = PendingIntent.getBroadcast(CourseDetail.this, ++MainActivity.numAlert,intent, PendingIntent.FLAG_IMMUTABLE);
+                        AlarmManager alarmManager = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
+                        alarmManager.set(AlarmManager.RTC_WAKEUP, trigger, sender);
                         return true;
                     case R.id.courseEndAlert:
 
                         return true;
                     case R.id.shareNote:
-
+                        if (!editTextCourseTitle.getText().toString().equals("") && !editNote.getText().toString().equals("")) {
+                            String shareTitle = editTextCourseTitle.getText() + " Note";
+                            Intent sendIntent = new Intent();
+                            sendIntent.setAction(Intent.ACTION_SEND);
+                            sendIntent.putExtra(Intent.EXTRA_TEXT, editNote.getText().toString());
+                            sendIntent.putExtra(Intent.EXTRA_TITLE, shareTitle);
+                            sendIntent.setType("text/plain");
+                            Intent shareIntent = Intent.createChooser(sendIntent, null);
+                            startActivity(shareIntent);
+                        }
+                        else{
+                                Toast.makeText(getApplicationContext(), "Can't Share. Make sure Course Title and Note aren't blank.",
+                                        Toast.LENGTH_LONG).show();
+                            }
                         return true;
                     case R.id.removeCourse:
                         if (id == 0) { // unsaved course
@@ -375,6 +411,10 @@ public class CourseDetail extends AppCompatActivity {
         String myFormat = "MM/dd/yy";
         SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
         editText.setText(sdf.format(calendar.getTime()));
+    }
+    private void goHome(View view) {
+        Intent intent = new Intent(CourseDetail.this, MainActivity.class);
+        startActivity(intent);
     }
 
 
