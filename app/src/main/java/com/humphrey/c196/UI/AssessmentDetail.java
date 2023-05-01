@@ -63,7 +63,6 @@ public class AssessmentDetail extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_assessment_detail);
         Toolbar toolbar = findViewById(R.id.toolbar);
-        ActionBar actionBar = getSupportActionBar();
         setSupportActionBar(toolbar);
         hamburger = toolbar.findViewById(R.id.menuIcon);
         home = toolbar.findViewById(R.id.homeIcon);
