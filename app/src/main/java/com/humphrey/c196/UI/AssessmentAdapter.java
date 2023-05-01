@@ -47,6 +47,7 @@ public class AssessmentAdapter extends RecyclerView.Adapter<AssessmentAdapter.As
                         int position = getAdapterPosition();
                         final Assessment selectedAssessment = assessmentList.get(position);
                         Intent intent = new Intent(context, AssessmentDetail.class);
+                        if(selectedAssessment.getCourseID() != 0){courseID = selectedAssessment.getCourseID();}
                         intent.putExtra("courseID", courseID);
                         intent.putExtra("id", selectedAssessment.getAssessmentID());
                         intent.putExtra("title", selectedAssessment.getTitle());

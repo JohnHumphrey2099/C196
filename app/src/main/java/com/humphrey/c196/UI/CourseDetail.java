@@ -182,70 +182,72 @@ public class CourseDetail extends AppCompatActivity {
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (termID ==0){
-                    if(position == 9999){
-                        ArrayList<Assessment> temp = new ArrayList<>(Util.cacheAssessments);
-                        Course course = new Course(id,
-                                editTextCourseTitle.getText().toString(),
-                                editTextCourseStart.getText().toString(),
-                                typeSpinner.getSelectedItem().toString(),
-                                editTextCourseEnd.getText().toString(),
-                                profNameField.getText().toString(),
-                                profPhoneField.getText().toString(),
-                                profEmailField.getText().toString(),
-                                editNote.getText().toString(),
-                                termID);
-                        course.setAssociatedAssessments(Util.cacheAssessments);
-                        Util.cacheCourses.add(course);
-                        Util.cacheAssessments.clear();
+                if (Util.validateDateRange(editTextCourseStart.getText().toString(), editTextCourseEnd.getText().toString())) {
+                    if (termID == 0) {
+                        if (position == 9999) {
+                            ArrayList<Assessment> temp = new ArrayList<>(Util.cacheAssessments);
+                            Course course = new Course(id,
+                                    editTextCourseTitle.getText().toString(),
+                                    editTextCourseStart.getText().toString(),
+                                    typeSpinner.getSelectedItem().toString(),
+                                    editTextCourseEnd.getText().toString(),
+                                    profNameField.getText().toString(),
+                                    profPhoneField.getText().toString(),
+                                    profEmailField.getText().toString(),
+                                    editNote.getText().toString(),
+                                    termID);
+                            course.setAssociatedAssessments(Util.cacheAssessments);
+                            Util.cacheCourses.add(course);
+                            Util.cacheAssessments.clear();
+                        } else {
+                            Course course = Util.cacheCourses.get(position);
+                            course.setTitle(editTextCourseTitle.getText().toString());
+                            course.setStartDate(editTextCourseStart.getText().toString());
+                            course.setStatus(typeSpinner.getSelectedItem().toString());
+                            course.setEndDate(editTextCourseEnd.getText().toString());
+                            course.setInstructorName(profNameField.getText().toString());
+                            course.setInstructorPhone(profPhoneField.getText().toString());
+                            course.setNote(editNote.getText().toString());
+                            course.setAssociatedAssessments(Util.cacheAssessments);
+                            Util.cacheAssessments.clear();
+                        }
+                    } else {//if we do have a term ID
+                        if (id == 0) {//if we have term id but course is unsaved
+                            //insert the course and return the primaryKey.
+                            int courseID = (int) repository.insertCourse(new Course(id,
+                                    editTextCourseTitle.getText().toString(),
+                                    editTextCourseStart.getText().toString(),
+                                    typeSpinner.getSelectedItem().toString(),
+                                    editTextCourseEnd.getText().toString(),
+                                    profNameField.getText().toString(),
+                                    profPhoneField.getText().toString(),
+                                    profEmailField.getText().toString(),
+                                    editNote.getText().toString(),
+                                    termID));
+                            for (Assessment a : Util.cacheAssessments) {
+                                a.setCourseID(courseID);
+                                repository.insertAssessment(a);
+                            } //save all cached assessments including courseID
+                        } else { //if we have a term id AND the course is already saved
+                            // update the course in the db.
+                            //don't worry about assessments, those would have already been inserted when saving on assessment screen
+                            repository.updateCourse(new Course(id,
+                                    editTextCourseTitle.getText().toString(),
+                                    editTextCourseStart.getText().toString(),
+                                    typeSpinner.getSelectedItem().toString(),
+                                    editTextCourseEnd.getText().toString(),
+                                    profNameField.getText().toString(),
+                                    profPhoneField.getText().toString(),
+                                    profEmailField.getText().toString(),
+                                    editNote.getText().toString(),
+                                    termID));
+                        }
                     }
-                    else{
-                        Course course = Util.cacheCourses.get(position);
-                        course.setTitle(editTextCourseTitle.getText().toString());
-                        course.setStartDate(editTextCourseStart.getText().toString());
-                        course.setStatus(typeSpinner.getSelectedItem().toString());
-                        course.setEndDate(editTextCourseEnd.getText().toString());
-                        course.setInstructorName(profNameField.getText().toString());
-                        course.setInstructorPhone(profPhoneField.getText().toString());
-                        course.setNote(editNote.getText().toString());
-                        course.setAssociatedAssessments(Util.cacheAssessments);
-                        Util.cacheAssessments.clear();
-                    }
+                    finish();
                 }
-                else{//if we do have a term ID
-                    if (id ==0){//if we have term id but course is unsaved
-                        //insert the course and return the primaryKey.
-                       int courseID = (int)repository.insertCourse(new Course(id,
-                                editTextCourseTitle.getText().toString(),
-                                editTextCourseStart.getText().toString(),
-                                typeSpinner.getSelectedItem().toString(),
-                                editTextCourseEnd.getText().toString(),
-                                profNameField.getText().toString(),
-                                profPhoneField.getText().toString(),
-                                profEmailField.getText().toString(),
-                                editNote.getText().toString(),
-                                termID));
-                       for (Assessment a : Util.cacheAssessments){
-                           a.setCourseID(courseID);
-                           repository.insertAssessment(a);
-                       } //save all cached assessments including courseID
-                    }
-                    else{ //if we have a term id AND the course is already saved
-                        // update the course in the db.
-                        //don't worry about assessments, those would have already been inserted when saving on assessment screen
-                        repository.updateCourse(new Course(id,
-                                editTextCourseTitle.getText().toString(),
-                                editTextCourseStart.getText().toString(),
-                                typeSpinner.getSelectedItem().toString(),
-                                editTextCourseEnd.getText().toString(),
-                                profNameField.getText().toString(),
-                                profPhoneField.getText().toString(),
-                                profEmailField.getText().toString(),
-                                editNote.getText().toString(),
-                                termID));
-                    }
+                else{
+                    Toast.makeText(getApplicationContext(),"Can't Save. Start Date is After end Date", Toast.LENGTH_LONG).show();
                 }
-                finish();
             }
         });
         addAssessment.setOnClickListener(new View.OnClickListener() {
@@ -330,23 +332,42 @@ public class CourseDetail extends AppCompatActivity {
         popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem menuItem) {
+                String dateInput;
+                Date date;
+                Long trigger;
+                Intent intent;
+                PendingIntent sender;
+                AlarmManager alarmManager;
                 switch (menuItem.getItemId()) {
                     case R.id.courseStartAlert:
-                        String dateInput = editTextCourseStart.getText().toString();
-                        Date date = null;
+                        dateInput = editTextCourseStart.getText().toString();
+                        date = null;
                         try{
                             date = sdf.parse(dateInput);
                         }catch (ParseException e){
                             e.printStackTrace();
                         }
-                        Long trigger = date.getTime();
-                        Intent intent = new Intent(CourseDetail.this, MyReceiver.class);
-                        intent.putExtra("key", "message I want to see");//TODO this needs to be a specific course code? Watching webinars now
-                        PendingIntent sender = PendingIntent.getBroadcast(CourseDetail.this, ++MainActivity.numAlert,intent, PendingIntent.FLAG_IMMUTABLE);
-                        AlarmManager alarmManager = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
+                        trigger = date.getTime();
+                        intent = new Intent(CourseDetail.this, MyReceiver.class);
+                        intent.putExtra("key", "Course " + editTextCourseTitle.getText().toString() + " starting.");
+                        sender = PendingIntent.getBroadcast(CourseDetail.this, ++MainActivity.numAlert,intent, PendingIntent.FLAG_IMMUTABLE);
+                        alarmManager = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
                         alarmManager.set(AlarmManager.RTC_WAKEUP, trigger, sender);
                         return true;
                     case R.id.courseEndAlert:
+                        dateInput = editTextCourseEnd.getText().toString();
+                        date = null;
+                        try{
+                            date = sdf.parse(dateInput);
+                        }catch (ParseException e){
+                            e.printStackTrace();
+                        }
+                        trigger = date.getTime();
+                        intent = new Intent(CourseDetail.this, MyReceiver.class);
+                        intent.putExtra("key", "Course " + editTextCourseTitle.getText().toString() + " ending.");
+                        sender = PendingIntent.getBroadcast(CourseDetail.this, ++MainActivity.numAlert,intent, PendingIntent.FLAG_IMMUTABLE);
+                        alarmManager = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
+                        alarmManager.set(AlarmManager.RTC_WAKEUP, trigger, sender);
 
                         return true;
                     case R.id.shareNote:
@@ -379,7 +400,6 @@ public class CourseDetail extends AppCompatActivity {
                                         Toast.LENGTH_LONG).show();
                             }
                         }
-
                         else {//course is in db
                             ArrayList<Assessment> temp = new ArrayList<>();
                             for (Assessment a : repository.getAllAssessments()) {

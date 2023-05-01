@@ -5,7 +5,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.PopupMenu;
 import androidx.appcompat.widget.Toolbar;
 
+import android.app.AlarmManager;
 import android.app.DatePickerDialog;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
@@ -187,38 +190,41 @@ public class AssessmentDetail extends AppCompatActivity {
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(courseID == 0){
-                    if(position == 9999){
-                        Assessment assessment = new Assessment(id,
-                                title.getText().toString(),
-                                type,
-                                startDate.getText().toString(),
-                                endDate.getText().toString(),courseID);
-                        Util.cacheAssessments.add(assessment);
+                if (Util.validateDateRange(startDate.getText().toString(), endDate.getText().toString())) {
+                    if (courseID == 0) {
+                        if (position == 9999) {
+                            Assessment assessment = new Assessment(id,
+                                    title.getText().toString(),
+                                    type,
+                                    startDate.getText().toString(),
+                                    endDate.getText().toString(), courseID);
+                            Util.cacheAssessments.add(assessment);
+                        } else {
+                            Assessment assessment = Util.cacheAssessments.get(position);
+                            assessment.setTitle(title.getText().toString());
+                            assessment.setType(type);
+                            assessment.setStartDate(startDate.getText().toString());
+                            assessment.setEndDate(endDate.getText().toString());
+                        }
+                    } else {
+                        if (id == 0) {
+                            repository.insertAssessment(new Assessment(id,
+                                    title.getText().toString(), type,
+                                    startDate.getText().toString(),
+                                    endDate.getText().toString(), courseID));
+                        } else {
+                            repository.updateAssessment(new Assessment(id,
+                                    title.getText().toString(), type,
+                                    startDate.getText().toString(),
+                                    endDate.getText().toString(), courseID));
+                        }
                     }
-                    else{
-                        Assessment assessment = Util.cacheAssessments.get(position);
-                        assessment.setTitle(title.getText().toString());
-                        assessment.setType(type);
-                        assessment.setStartDate(startDate.getText().toString());
-                        assessment.setEndDate(endDate.getText().toString());
-                    }
+                    finish();
                 }
                 else{
-                    if(id == 0){
-                        repository.insertAssessment(new Assessment(id,
-                                title.getText().toString(), type,
-                                startDate.getText().toString(),
-                                endDate.getText().toString(), courseID));
-                    }
-                    else{
-                        repository.updateAssessment(new Assessment(id,
-                                title.getText().toString(), type,
-                                startDate.getText().toString(),
-                                endDate.getText().toString(), courseID));
-                    }
+                    Toast.makeText(getApplicationContext(),"Can't Save. Start Date is After end Date", Toast.LENGTH_LONG).show();
+
                 }
-                finish();
             }
         });
         radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
@@ -249,7 +255,44 @@ public class AssessmentDetail extends AppCompatActivity {
         popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem menuItem) {
+                String dateInput;
+                Date date;
+                Long trigger;
+                Intent intent;
+                PendingIntent sender;
+                AlarmManager alarmManager;
                 switch (menuItem.getItemId()) {
+                    case R.id.assessmentStartAlert:
+                        dateInput = startDate.getText().toString();
+                        date = null;
+                        try{
+                            date = sdf.parse(dateInput);
+                        }catch (ParseException e){
+                            e.printStackTrace();
+                        }
+                        trigger = date.getTime();
+                        intent = new Intent(AssessmentDetail.this, MyReceiver.class);
+                        intent.putExtra("key", "Assessment " + title.getText().toString() + " starting.");
+                        sender = PendingIntent.getBroadcast(AssessmentDetail.this, ++MainActivity.numAlert,intent, PendingIntent.FLAG_IMMUTABLE);
+                        alarmManager = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
+                        alarmManager.set(AlarmManager.RTC_WAKEUP, trigger, sender);
+                        return true;
+                    case R.id.assessmentEndAlert:
+                        dateInput = endDate.getText().toString();
+                        date = null;
+                        try{
+                            date = sdf.parse(dateInput);
+                        }catch (ParseException e){
+                            e.printStackTrace();
+                        }
+                        trigger = date.getTime();
+                        intent = new Intent(AssessmentDetail.this, MyReceiver.class);
+                        intent.putExtra("key", "Assessment " + title.getText().toString() + " ending.");
+                        sender = PendingIntent.getBroadcast(AssessmentDetail.this, ++MainActivity.numAlert,intent, PendingIntent.FLAG_IMMUTABLE);
+                        alarmManager = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
+                        alarmManager.set(AlarmManager.RTC_WAKEUP, trigger, sender);
+
+                        return true;
                     case R.id.removeAssessment:
                         if(id !=0){
                             repository.deleteAssessment(new Assessment(id, null, null, null, null, courseID));

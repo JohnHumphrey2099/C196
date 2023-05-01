@@ -107,29 +107,34 @@ public class TermDetail extends AppCompatActivity {
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(id == 0) {
-                    id = (int)(repository.insertTerm(new Term(
-                            id,
-                            editTitle.getText().toString(),
-                            editStartDate.getText().toString(),
-                            editEndDate.getText().toString())));
-                    for(Course c : Util.cacheCourses){
-                        c.setTermID(id);
-                        int courseID = (int)(repository.insertCourse(c));
-                        for(Assessment assessment: c.getAssociatedAssessments()){
-                            assessment.setCourseID(courseID);
-                            repository.insertAssessment(assessment);
+                if (Util.validateDateRange(editStartDate.getText().toString(), editEndDate.getText().toString())) {
+                    if(id == 0) {
+                        id = (int)(repository.insertTerm(new Term(
+                                id,
+                                editTitle.getText().toString(),
+                                editStartDate.getText().toString(),
+                                editEndDate.getText().toString())));
+                        for(Course c : Util.cacheCourses){
+                            c.setTermID(id);
+                            int courseID = (int)(repository.insertCourse(c));
+                            for(Assessment assessment: c.getAssociatedAssessments()){
+                                assessment.setCourseID(courseID);
+                                repository.insertAssessment(assessment);
+                            }
                         }
                     }
+                    else{
+                        repository.updateTerm(new Term(id,
+                                editTitle.getText().toString(),
+                                editStartDate.getText().toString(),
+                                editEndDate.getText().toString()));
+                    }
+                    Util.cacheCourses.clear();
+                    goToTermScreen(v);
                 }
                 else{
-                    repository.updateTerm(new Term(id,
-                            editTitle.getText().toString(),
-                            editStartDate.getText().toString(),
-                            editEndDate.getText().toString()));
+                    Toast.makeText(getApplicationContext(),"Can't Save. Start Date is After end Date", Toast.LENGTH_LONG).show();
                 }
-                Util.cacheCourses.clear();
-                goToTermScreen(v);
             }
         });
         home.setOnClickListener(new View.OnClickListener() {
